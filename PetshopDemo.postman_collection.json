@@ -225,7 +225,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://localhost:7025/api/products/bo/cat?availablesOnly=false",
+					"raw": "https://localhost:7025/api/products/bo/dog?availablesOnly=false",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -235,7 +235,7 @@
 						"api",
 						"products",
 						"bo",
-						"cat"
+						"dog"
 					],
 					"query": [
 						{
