@@ -1,0 +1,354 @@
+openapi: 3.0.1
+info:
+  title: PetShopAPI
+  version: '1.0'
+paths:
+  /api/Clients:
+    post:
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ClientRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ClientRequest'
+      responses:
+        '200':
+          description: OK
+  /api/Clients/{taxnumber}:
+    get:
+      tags:
+        - Clients
+      parameters:
+        - name: taxnumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - Clients
+      parameters:
+        - name: taxnumber
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientUpdateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ClientUpdateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ClientUpdateRequest'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Clients
+      parameters:
+        - name: taxnumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/Products/{domain}/{type}:
+    get:
+      tags:
+        - Products
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: availablesOnly
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+  /api/Products:
+    post:
+      tags:
+        - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: OK
+  /api/Products/{domain}/{name}:
+    put:
+      tags:
+        - Products
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Products
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/Sales:
+    post:
+      tags:
+        - Sales
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SalesRequest'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - Sales
+      parameters:
+        - name: domain
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/Setup:
+    post:
+      tags:
+        - Setup
+      responses:
+        '200':
+          description: OK
+  /api/Users:
+    post:
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AddUserRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AddUserRequest'
+      responses:
+        '200':
+          description: OK
+  /api/Users/{domain}/{username}:
+    delete:
+      tags:
+        - Users
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /api/Users/login:
+    post:
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    AddUserRequest:
+      type: object
+      properties:
+        domain:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AuthenticationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        domain:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ClientRequest:
+      type: object
+      properties:
+        taxNumber:
+          type: string
+          nullable: true
+        fullName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ClientUpdateRequest:
+      type: object
+      properties:
+        fullname:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        domain:
+          type: string
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        petType:
+          type: string
+          nullable: true
+        stock:
+          type: integer
+          format: int32
+        unitaryPrice:
+          type: number
+          format: double
+      additionalProperties: false
+    SalesRequest:
+      required:
+        - client
+      type: object
+      properties:
+        productName:
+          type: string
+          nullable: true
+        client:
+          $ref: '#/components/schemas/ClientRequest'
+        quantity:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: double
+      additionalProperties: false

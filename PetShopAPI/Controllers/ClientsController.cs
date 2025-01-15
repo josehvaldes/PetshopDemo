@@ -63,6 +63,29 @@ namespace PetShopAPI.Controllers
             }
         }
 
+        [HttpGet("{taxnumber}")]
+        public async Task<IActionResult> RetrieveClient(string taxnumber)
+        {
+            try
+            {
+                var response = await _clientService.Retrieve(taxnumber);
+                if (response != null)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    _logger.LogWarning($"Client {taxnumber} not found.");
+                    return BadRequest(new { Error = new[] { $"Client {taxnumber} not found." } });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Unexpected internal error: {ex.Message}");
+                return StatusCode(500, new { Error = new[] { ex.Message }, StatusCode = StatusCodes.Status500InternalServerError });
+            }
+        }
+
         [HttpPut("{taxnumber}")]
         public async Task<IActionResult> UpdateClient(string taxnumber, [FromBody] ClientUpdateRequest request)
         {
@@ -98,28 +121,6 @@ namespace PetShopAPI.Controllers
             }
         }
 
-        [HttpGet("{taxnumber}")]
-        public async Task<IActionResult> RetrieveClient(string taxNumber)
-        {
-            try
-            {
-                var response = await _clientService.Retrieve(taxNumber);
-                if (response != null)
-                {
-                    return Ok(response);
-                }
-                else
-                {
-                    _logger.LogWarning($"Client {taxNumber} not found.");
-                    return BadRequest(new { Error = new[] { $"Client {taxNumber} not found." } });
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Unexpected internal error: {ex.Message}");
-                return StatusCode(500, new { Error = new[] { ex.Message }, StatusCode = StatusCodes.Status500InternalServerError });
-            }
-        }
 
         [HttpDelete("{taxnumber}")]
         public async Task<IActionResult> DeleteClient(string taxnumber)

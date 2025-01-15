@@ -81,11 +81,14 @@ namespace PetShopAPI.Controllers
             }
         }
 
-        [HttpPut()]
-        public async Task<IActionResult> UpdateProduct(ProductRequest request)
+        [HttpPut("{domain}/{name}")]
+        public async Task<IActionResult> UpdateProduct(string domain, string name, [FromBody] ProductRequest request)
         {
             try
             {
+                request.Domain = domain;
+                request.Name = name;
+
                 var validator = await _productRequestValidator.ValidateAsync(request);
 
                 if (!validator.IsValid)
