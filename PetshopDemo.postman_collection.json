@@ -1,0 +1,594 @@
+{
+	"info": {
+		"_postman_id": "20b3d8ea-4c54-4c21-b10f-fe7b4cf37bf5",
+		"name": "PetShopDemo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15440418"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsondata = JSON.parse(pm.response.text());\r",
+							"pm.collectionVariables.set(\"token\",jsondata.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"123456\",\r\n    \"domain\":\"bo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/users/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users/ Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"ningning\",\r\n    \"password\" : \"123456\",\r\n    \"domain\" : \"bo\",\r\n    \"email\" : \"ningning@petshotdemo.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/users/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users/ Retrieve",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:7025/api/users/bo/ningning",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"users",
+						"bo",
+						"ningning"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users/ Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:7025/api/users/bo/ningning",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"users",
+						"bo",
+						"ningning"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products/ Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Cibau\",\r\n    \"Domain\":\"bo\",\r\n    \"Category\":\"food\",\r\n    \"Description\":\"Standard for for dogs\",\r\n    \"PetType\":\"dog\",\r\n    \"Stock\":10,\r\n    \"UnitaryPrice\":10.5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/products/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products/ Retrieve",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:7025/api/products/bo/cat?availablesOnly=false",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"products",
+						"bo",
+						"cat"
+					],
+					"query": [
+						{
+							"key": "availablesOnly",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products/ Update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Cibau\",\r\n    \"Domain\":\"bo\",\r\n    \"Category\":\"food\",\r\n    \"Description\":\"Standard for for dogs1\",\r\n    \"PetType\":\"dog\",\r\n    \"Stock\":20,\r\n    \"UnitaryPrice\":10.5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/products/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products/ Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/products/bo/Cibau/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"products",
+						"bo",
+						"Cibau",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clients/ Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"TaxNumber\":\"369856\",\r\n    \"FullName\":\"Ning YiZhuo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/clients/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"clients",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clients/ Retrieve",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:7025/api/clients/369856",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"clients",
+						"369856"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clients/ Update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"FullName\":\"Ning Yi Zhuo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/clients/369856",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"clients",
+						"369856"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clients/ Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/clients/369856",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"clients",
+						"369856"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sales/ Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productname\":\"wiskas\",\r\n    \"Quantity\":1,\r\n    \"Price\":79.9,\r\n    \"Client\": {\r\n        \"TaxNumber\": \"123456\",\r\n        \"FullName\":\"Jin Jin\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/sales/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"sales",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sales/ Retrieve",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:7025/api/sales/?domain=bo",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"sales",
+						""
+					],
+					"query": [
+						{
+							"key": "domain",
+							"value": "bo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "setup POST",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7025/api/setup/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7025",
+					"path": [
+						"api",
+						"setup",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "0",
+			"type": "string"
+		}
+	]
+}
