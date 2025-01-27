@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using PetShop.Model;
-using PetShopAPI.Models;
+using PetShopSalesAPI.Models;
 
-namespace PetShopAPI.Validators
+namespace PetShopSalesAPI.Validators
 {
     public class ClientRequestValidator: AbstractValidator<ClientRequest>
     {

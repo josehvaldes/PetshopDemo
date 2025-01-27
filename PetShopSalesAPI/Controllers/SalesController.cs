@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.Model;
 using PetShop.Service;
-using PetShopAPI.Auth;
-using PetShopAPI.Extensions;
-using PetShopAPI.Models;
-using PetShopAPI.Validators;
-using System.Reflection.Metadata.Ecma335;
+using PetShopSalesAPI.Auth;
+using PetShopSalesAPI.Extensions;
 
 namespace PetShopAPI.Controllers
 {
