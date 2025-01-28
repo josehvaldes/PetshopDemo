@@ -11,15 +11,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Data
+namespace PetShop.Data.Azure
 {
     public class SaleRepository : ISaleRepository
     {
         internal static readonly string AzureTableName = "Sales";
         private readonly AzureSettings _azureSettings;
-        private readonly ILogger<SaleRepository> _logger;        
+        private readonly ILogger<SaleRepository> _logger;
 
-        public SaleRepository(IOptions<AzureSettings> settings, ILogger<SaleRepository> logger) 
+        public SaleRepository(IOptions<AzureSettings> settings, ILogger<SaleRepository> logger)
         {
             _logger = logger;
             _azureSettings = settings.Value;
@@ -73,7 +73,7 @@ namespace PetShop.Data
                 throw new Exception($"Delete Sale failed: {e.Message}", e);
             }
         }
-        
+
 
         public async Task<IEnumerable<SaleEntity>> RetrieveList(string domain)
         {

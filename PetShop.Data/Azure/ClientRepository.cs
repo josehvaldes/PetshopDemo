@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Data
+namespace PetShop.Data.Azure
 {
     public class ClientRepository : IClientRepository
     {
@@ -19,7 +19,7 @@ namespace PetShop.Data
         private readonly AzureSettings _azureSettings;
         private readonly ILogger<ClientRepository> _logger;
 
-        public ClientRepository(IOptions<AzureSettings> settings, ILogger<ClientRepository> logger) 
+        public ClientRepository(IOptions<AzureSettings> settings, ILogger<ClientRepository> logger)
         {
             _azureSettings = settings.Value;
             _logger = logger;
@@ -27,7 +27,7 @@ namespace PetShop.Data
 
         public async Task<ClientEntity?> Create(ClientEntity client)
         {
-            try 
+            try
             {
                 var tableClient = new TableClient(
                 new Uri(_azureSettings.StorageURI),
@@ -48,12 +48,12 @@ namespace PetShop.Data
                 _logger.LogError($"Duplicated Client. Taxnumber: '{client.PartitionKey}', Fullname: '{client.RowKey}'. Message: {ex.Message}");
                 throw new Exception($"Duplicated Client. Taxnumber: '{client.taxnumber}', Fullname: '{client.fullname}'. Status: {ex.Status}");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError($"Error Create client: Domain: {client.taxnumber}, fullname:{client.fullname}. Message {ex.Message}");
                 throw new Exception($"Error Create client: Domain: {client.taxnumber}, fullname:{client.fullname}. Message {ex.Message}", ex);
             }
-            
+
         }
         public async Task<ClientEntity?> Retrieve(string taxNumberEnd, string taxNumber)
         {
@@ -69,7 +69,7 @@ namespace PetShop.Data
                 {
                     return entity.Value;
                 }
-                else 
+                else
                 {
                     _logger.LogWarning($"Client {taxNumber} not found.");
                     return null;

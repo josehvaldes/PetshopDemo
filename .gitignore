@@ -400,3 +400,5 @@ FodyWeavers.xsd
 *.sln.iml
 PetShopAPI/appsettings.Development.json
 PetShopSalesAPI/appsettings.Development.json
+PetShopAPI/Logfiles/*
+PetShopSalesAPI/Logfiles/*

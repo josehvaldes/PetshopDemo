@@ -1,4 +1,4 @@
-﻿namespace Petshop.Common.Authorization
+﻿namespace PetShop.Service
 {
     public static class Role
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Data
+namespace PetShop.Data.Mockup
 {
     public class ClientMockup : IClientRepository
     {
@@ -26,7 +26,7 @@ namespace PetShop.Data
 
         public async Task<ClientEntity?> Create(ClientEntity client)
         {
-            return await Task.Run(() => 
+            return await Task.Run(() =>
             {
                 if (!_clientMockups.Where(x => x.taxnumber == client.taxnumber).Any())
                 {
@@ -61,7 +61,7 @@ namespace PetShop.Data
         {
             return await Task.Run(() =>
             {
-                return  _clientMockups.Where(x => x.taxnumber == taxNumber).FirstOrDefault();
+                return _clientMockups.Where(x => x.taxnumber == taxNumber).FirstOrDefault();
             });
         }
 

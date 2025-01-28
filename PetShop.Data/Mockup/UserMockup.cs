@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Data
+namespace PetShop.Data.Mockup
 {
     public class UserMockup : IUserRepository
     {
@@ -26,7 +26,8 @@ namespace PetShop.Data
 
         public async Task<UserEntity?> Create(UserEntity user)
         {
-            var response = await Task.Run(() => {
+            var response = await Task.Run(() =>
+            {
 
                 if (!_mockupUsers.Where(x => x.domain == user.domain && x.username == user.username).Any())
                 {
@@ -34,7 +35,7 @@ namespace PetShop.Data
                     _mockupUsers.Add(user);
                     return user;
                 }
-                else 
+                else
                 {
                     throw new InvalidDataException($"Duplicated User: Username {user.username}, domain: {user.domain}");
                 }
@@ -62,8 +63,9 @@ namespace PetShop.Data
 
         public async Task<UserEntity?> Retrieve(string domain, string username)
         {
-            var user = await Task.Run(() => {
-                return _mockupUsers.Where(x=> x.RowKey == username && x.PartitionKey == domain).FirstOrDefault();
+            var user = await Task.Run(() =>
+            {
+                return _mockupUsers.Where(x => x.RowKey == username && x.PartitionKey == domain).FirstOrDefault();
             });
 
             return user;

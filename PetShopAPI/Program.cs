@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Petshop.Common.Settings;
 using PetShop.Data;
+using PetShop.Data.Azure;
+using PetShop.Data.Mockup;
 using PetShop.Service;
 using PetShopAPI.Auth;
 using PetShopAPI.Middlewares;

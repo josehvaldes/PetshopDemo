@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Data
+namespace PetShop.Data.Mockup
 {
     public class SaleMockup : ISaleRepository
     {
@@ -13,7 +13,8 @@ namespace PetShop.Data
 
         public async Task<SaleEntity?> Create(SaleEntity entity)
         {
-            return await Task.Run(() => {
+            return await Task.Run(() =>
+            {
                 _mockupSales.Add(entity);
                 return entity;
             });
@@ -21,9 +22,10 @@ namespace PetShop.Data
 
         public async Task<bool> Delete(SaleEntity entity)
         {
-            return await Task.Run(() => {
+            return await Task.Run(() =>
+            {
                 var items = _mockupSales.Where(x => x.saleid == entity.saleid && x.domain == entity.domain);
-                if (items.Any()) 
+                if (items.Any())
                 {
                     _mockupSales.Remove(items.First());
                     return true;
@@ -34,7 +36,8 @@ namespace PetShop.Data
 
         public async Task<IEnumerable<SaleEntity>> RetrieveList(string domain)
         {
-            return await Task.Run(() => {
+            return await Task.Run(() =>
+            {
                 return _mockupSales.Where(x => x.domain == domain);
             });
         }

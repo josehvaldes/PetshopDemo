@@ -1,8 +1,6 @@
 ﻿using Azure;
-using Petshop.Common.Authorization;
 using PetShop.Data;
 using PetShop.Model;
-using System;
 
 namespace PetShop.Service
 {

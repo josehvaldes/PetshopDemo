@@ -3,17 +3,18 @@ using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Petshop.Common.Settings;
+using PetShop.Data.Mockup;
 using PetShop.Model;
 
 
-namespace PetShop.Data
+namespace PetShop.Data.Azure
 {
     public class SetupRepository : ISetupRepository
     {
         private readonly AzureSettings _azureSettings;
         private readonly ILogger<SetupRepository> _logger;
 
-        public SetupRepository(IOptions<AzureSettings> settings, ILogger<SetupRepository> logger) 
+        public SetupRepository(IOptions<AzureSettings> settings, ILogger<SetupRepository> logger)
         {
             _azureSettings = settings.Value;
             _logger = logger;
@@ -28,7 +29,7 @@ namespace PetShop.Data
             var userResult = await SetupUser(response);
             var clientResult = await SetupClient(response);
 
-            if (saleResult && productResult && userResult && clientResult) 
+            if (saleResult && productResult && userResult && clientResult)
             {
                 response.AddMessage("Process completed");
             }
@@ -36,9 +37,10 @@ namespace PetShop.Data
             return response;
         }
 
-        private async Task<bool> SetupSales(CallResponse response) 
+        private async Task<bool> SetupSales(CallResponse response)
         {
-            try { 
+            try
+            {
                 //CREATE Sales
                 var tableClient = new TableClient(
                         new Uri(_azureSettings.StorageURI),
@@ -64,7 +66,8 @@ namespace PetShop.Data
 
         private async Task<bool> SetupClient(CallResponse response)
         {
-            try { 
+            try
+            {
                 //CREATE ClientTable
                 var tableClient = new TableClient(
                         new Uri(_azureSettings.StorageURI),
@@ -97,7 +100,8 @@ namespace PetShop.Data
 
         private async Task<bool> SetupProducts(CallResponse response)
         {
-            try { 
+            try
+            {
                 //CREATE Products Table
                 var tableClient = new TableClient(
                         new Uri(_azureSettings.StorageURI),
@@ -111,14 +115,14 @@ namespace PetShop.Data
                     var item = tableItem.Value;
                     response.AddMessage($"Product table{(item == null ? " NOT " : " ")}ready. Status: {tableItem.GetRawResponse().Status}");
 
-                    if (tableItem.GetRawResponse().Status == 204) 
+                    if (tableItem.GetRawResponse().Status == 204)
                     {
                         foreach (var product in ProductMockup._productMockups)
                         {
                             var result = await tableClient.AddEntityAsync(product);
                             response.AddMessage($"Create Product '{product.name}' {(result.Status == 204 ? "Success" : "Failed")}. Status:{result.Status}");
                         }
-                    }                
+                    }
                 }
             }
             catch (Exception e)
@@ -129,9 +133,9 @@ namespace PetShop.Data
             return true;
         }
 
-        private async Task<bool> SetupUser(CallResponse response) 
+        private async Task<bool> SetupUser(CallResponse response)
         {
-            try 
+            try
             {
                 //CREATE USERS
                 var tableClient = new TableClient(
@@ -154,11 +158,11 @@ namespace PetShop.Data
                         }
                     }
                 }
-            } 
-            catch (Exception e) 
+            }
+            catch (Exception e)
             {
                 response.AddMessage($"Create 'User' Table Failed. {e.Message}");
-            }            
+            }
 
             return true;
         }

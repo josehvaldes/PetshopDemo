@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Data
+namespace PetShop.Data.Mockup
 {
     public class ProductMockup : IProductRepository
     {
         internal static List<ProductEntity> _productMockups = new List<ProductEntity>() {
-            
+
             new ProductEntity(){
                 guid="19a31d90-8123-4288-b9a6-e704aadde359",
                 pettype="cat",
@@ -55,7 +55,8 @@ namespace PetShop.Data
 
         public async Task<IEnumerable<ProductEntity>> RetrieveList(string domain, string type)
         {
-            var products = await Task.Run(() => { 
+            var products = await Task.Run(() =>
+            {
                 return _productMockups.Where(x => x.PartitionKey == domain && x.pettype == type);
             });
             var list = products.ToList();
@@ -65,7 +66,8 @@ namespace PetShop.Data
 
         public async Task<IEnumerable<ProductEntity>> RetrieveAvailablesList(string domain, string type)
         {
-            var products = await Task.Run(() => {
+            var products = await Task.Run(() =>
+            {
                 return _productMockups.Where(x => x.PartitionKey == domain && x.pettype == type && x.stock > 0);
             });
             return products;
@@ -73,7 +75,8 @@ namespace PetShop.Data
 
         public async Task<ProductEntity?> Retrieve(string domain, string name)
         {
-            var products = await Task.Run(() => {
+            var products = await Task.Run(() =>
+            {
                 return _productMockups.Where(x => x.PartitionKey == domain && x.RowKey == name).FirstOrDefault();
             });
             return products;

@@ -8,14 +8,14 @@ using PetShop.Model;
 using System.Net;
 using System.Security;
 
-namespace PetShop.Data
+namespace PetShop.Data.Azure
 {
     public class UserRepository : IUserRepository
     {
         internal static readonly string AzureTableName = "Users";
         private readonly AzureSettings _azureSettings;
         private readonly ILogger<UserRepository> _logger;
-        public UserRepository(IOptions<AzureSettings> settings, ILogger<UserRepository> logger) 
+        public UserRepository(IOptions<AzureSettings> settings, ILogger<UserRepository> logger)
         {
             _azureSettings = settings.Value;
             _logger = logger;
@@ -39,7 +39,7 @@ namespace PetShop.Data
                 _logger.LogWarning($"Unexpected Response status: [{response.Status}]");
                 return null;
             }
-            catch (RequestFailedException ex) 
+            catch (RequestFailedException ex)
             {
                 _logger.LogError($"Duplicated User. Domain: '{user.PartitionKey}', username: '{user.RowKey}'. Message: {ex.Message}");
                 throw new Exception($"Duplicated User. Domain: '{user.PartitionKey}', username: '{user.RowKey}'. Status: {ex.Status}");
@@ -48,7 +48,7 @@ namespace PetShop.Data
             {
                 _logger.LogError($"Error Add User: Domain: {user.domain}, User {user.username}. Message {ex.Message}");
                 throw new Exception($"Error Add User: Domain: {user.domain}, User {user.username}. Message {ex.Message}", ex);
-            }            
+            }
         }
 
         public async Task<bool> Delete(UserEntity user)
@@ -80,7 +80,7 @@ namespace PetShop.Data
 
         public async Task<UserEntity?> Retrieve(string domain, string username)
         {
-            try 
+            try
             {
                 var tableClient = new TableClient(
                     new Uri(_azureSettings.StorageURI),
@@ -89,23 +89,23 @@ namespace PetShop.Data
                     new DefaultAzureCredential()
                     );
 
-                var entity = await tableClient.GetEntityIfExistsAsync<UserEntity>(domain,username);
+                var entity = await tableClient.GetEntityIfExistsAsync<UserEntity>(domain, username);
                 if (entity.HasValue)
                 {
                     return entity.Value;
                 }
-                else 
+                else
                 {
                     _logger.LogWarning($"User not found: {username}. domain:{domain}");
                     return null;
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 _logger.LogError($"Azure access failed {e.Message}");
                 throw new Exception($"Azure User access failed {e.Message}", e);
             }
-            
+
         }
     }
 }

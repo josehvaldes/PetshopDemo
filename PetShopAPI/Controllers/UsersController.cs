@@ -3,7 +3,6 @@ using Azure.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Petshop.Common.Authorization;
 using PetShop.Model;
 using PetShop.Service;
 using PetShopAPI.Auth;

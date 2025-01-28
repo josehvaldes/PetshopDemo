@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Data
+namespace PetShop.Data.Azure
 {
     public class ProductRepository : IProductRepository
     {
@@ -19,7 +19,7 @@ namespace PetShop.Data
         private readonly AzureSettings _azureSettings;
         private readonly ILogger<ProductRepository> _logger;
 
-        public ProductRepository(IOptions<AzureSettings> settings, ILogger<ProductRepository> logger) 
+        public ProductRepository(IOptions<AzureSettings> settings, ILogger<ProductRepository> logger)
         {
             _azureSettings = settings.Value;
             _logger = logger;
@@ -36,8 +36,8 @@ namespace PetShop.Data
                     AzureTableName,
                     new DefaultAzureCredential());
 
-                AsyncPageable<ProductEntity> queryResultsFilter = tableClient.QueryAsync<ProductEntity>(filter: $"PartitionKey eq '{domain}' and pettype eq '{type}'", maxPerPage:50);
-                
+                AsyncPageable<ProductEntity> queryResultsFilter = tableClient.QueryAsync<ProductEntity>(filter: $"PartitionKey eq '{domain}' and pettype eq '{type}'", maxPerPage: 50);
+
                 await foreach (Page<ProductEntity> page in queryResultsFilter.AsPages())
                 {
                     foreach (ProductEntity qEntity in page.Values)
