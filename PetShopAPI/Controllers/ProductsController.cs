@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Asp.Versioning;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.Model;
@@ -9,7 +10,8 @@ using PetShopAPI.Validators;
 
 namespace PetShopAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion(1)]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize()]
     public class ProductsController : ControllerBase

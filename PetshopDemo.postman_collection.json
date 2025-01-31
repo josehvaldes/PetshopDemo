@@ -34,7 +34,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/users/login",
+					"raw": "https://localhost:7025/api/v1/users/login",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -42,6 +42,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"users",
 						"login"
 					]
@@ -82,7 +83,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/users/",
+					"raw": "https://localhost:7025/api/v1/users/",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -90,6 +91,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"users",
 						""
 					]
@@ -121,7 +123,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://localhost:7025/api/users/bo/ningning",
+					"raw": "https://localhost:7025/api/v1/users/bo/ningning",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -129,6 +131,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"users",
 						"bo",
 						"ningning"
@@ -161,7 +164,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://localhost:7025/api/users/bo/ningning",
+					"raw": "https://localhost:7025/api/v1/users/bo/ningning",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -169,6 +172,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"users",
 						"bo",
 						"ningning"
@@ -198,7 +202,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/products/",
+					"raw": "https://localhost:7025/api/v1/products/",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -206,6 +210,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"products",
 						""
 					]
@@ -225,7 +230,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://localhost:7025/api/products/bo/dog?availablesOnly=false",
+					"raw": "https://localhost:7025/api/v1/products/bo/dog?availablesOnly=false",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -233,6 +238,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"products",
 						"bo",
 						"dog"
@@ -260,7 +266,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\":\"Cibau\",\r\n    \"Domain\":\"bo\",\r\n    \"Category\":\"food\",\r\n    \"Description\":\"Standard for for dogs1\",\r\n    \"PetType\":\"dog\",\r\n    \"Stock\":20,\r\n    \"UnitaryPrice\":10.5\r\n}",
+					"raw": "{\r\n    \"Category\":\"food\",\r\n    \"Description\":\"Standard for for dogs1\",\r\n    \"PetType\":\"dog\",\r\n    \"Stock\":20,\r\n    \"UnitaryPrice\":10.5\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -268,7 +274,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/products/",
+					"raw": "https://localhost:7025/api/v1/products/bo/Cibau",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -276,8 +282,10 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"products",
-						""
+						"bo",
+						"Cibau"
 					]
 				}
 			},
@@ -304,7 +312,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/products/bo/Cibau/",
+					"raw": "https://localhost:7025/api/v1/products/bo/Cibau/",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -312,6 +320,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"products",
 						"bo",
 						"Cibau",
@@ -342,7 +351,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/clients/",
+					"raw": "https://localhost:7025/api/v1/clients/",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -350,6 +359,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"clients",
 						""
 					]
@@ -369,7 +379,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://localhost:7025/api/clients/369856",
+					"raw": "https://localhost:7025/api/v1/clients/369856",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -377,6 +387,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"clients",
 						"369856"
 					]
@@ -405,7 +416,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/clients/369856",
+					"raw": "https://localhost:7025/api/v1/clients/369856",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -413,6 +424,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"clients",
 						"369856"
 					]
@@ -441,7 +453,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/clients/369856",
+					"raw": "https://localhost:7025/api/v1/clients/369856",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -449,6 +461,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"clients",
 						"369856"
 					]
@@ -477,7 +490,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/sales/",
+					"raw": "https://localhost:7025/api/v1/sales/",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -485,6 +498,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"sales",
 						""
 					]
@@ -504,7 +518,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://localhost:7025/api/sales/?domain=bo",
+					"raw": "https://localhost:7025/api/v1/sales/?domain=bo",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -512,6 +526,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"sales",
 						""
 					],
@@ -546,7 +561,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7025/api/setup/",
+					"raw": "https://localhost:7025/api/v1/setup/",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -554,6 +569,7 @@
 					"port": "7025",
 					"path": [
 						"api",
+						"v1",
 						"setup",
 						""
 					]

@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using Asp.Versioning;
+using Azure.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,8 @@ using PetShopSalesAPI.Extensions;
 
 namespace PetShopAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion(1)]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
     public class SalesController : ControllerBase
