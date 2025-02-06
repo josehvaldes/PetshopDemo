@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using FluentValidation;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -17,11 +18,13 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 
 builder.Services.AddApiVersioning(options =>
@@ -76,9 +79,16 @@ builder.Services.AddScoped<ISetupRepository, SetupRepository>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<AuthenticationRequestValidator>();
 
+var log = new LoggerConfiguration().CreateLogger();
+
 //Add support to logging with SERILOG
-builder.Host.UseSerilog((context, configuration) =>
-    configuration.ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, services, configuration) => 
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+    configuration.WriteTo.ApplicationInsights(
+            services.GetRequiredService<TelemetryConfiguration>(), TelemetryConverter.Traces
+            );
+});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -98,8 +108,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 app.UseMiddleware<JwtMiddleware>();
 

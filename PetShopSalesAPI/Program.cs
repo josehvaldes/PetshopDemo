@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using FluentValidation;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Petshop.Common.Settings;
@@ -12,6 +13,8 @@ using PetShopSalesAPI.Validators;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -77,8 +80,14 @@ builder.Services.AddScoped<ISetupRepository, SetupRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<SalesRequestValidator>();
 
 //Add support to logging with SERILOG
-builder.Host.UseSerilog((context, configuration) =>
-    configuration.ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+    configuration.WriteTo.ApplicationInsights(
+            services.GetRequiredService<TelemetryConfiguration>(), TelemetryConverter.Traces
+            );
+});
+
 
 
 var app = builder.Build();
@@ -90,6 +99,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
