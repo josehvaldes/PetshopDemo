@@ -6,13 +6,14 @@ using NUnit.Framework;
 using PetShop.Data;
 using PetShop.Model;
 using PetShop.Service;
+using PetShop.Tests.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Tests
+namespace PetShop.Tests.ServiceTests
 {
     [TestFixture]
     public class ProductServiceTests
@@ -25,15 +26,11 @@ namespace PetShop.Tests
             {
             };
 
-            var entity = new ProductEntity()
-            {
-                guid = Guid.NewGuid().ToString(),
-                ETag = ETag.All,
-            };
+            var product = ProductFixture.GetProduct();
 
             var loggerMock = new TestLogger<ProductService>();
             var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(m => m.Create(It.IsAny<ProductEntity>())).Returns(Task.FromResult<ProductEntity?>(entity));
+            productRepositoryMock.Setup(m => m.Create(It.IsAny<ProductEntity>())).Returns(Task.FromResult<ProductEntity?>(product));
 
             var productService = new ProductService(productRepositoryMock.Object, loggerMock);
             var entityResult = productService.Create(request).Result;
@@ -45,18 +42,13 @@ namespace PetShop.Tests
         [Test]
         public void Test_Delete_Product()
         {
-            var domain = "bo";
-            var name = "dog chow";
-            var entity = new ProductEntity()
-            {
-                guid = Guid.NewGuid().ToString(),
-                ETag = ETag.All,
-                domain = domain,
-                name = name
-            };
+            var product = ProductFixture.GetProduct();
+            var domain = product.domain;
+            var name = product.name;
+
             var loggerMock = new TestLogger<ProductService>();
             var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(entity);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(product);
             productRepositoryMock.Setup(m => m.Delete(It.IsAny<ProductEntity>())).ReturnsAsync(true);
 
             var productService = new ProductService(productRepositoryMock.Object, loggerMock);
@@ -67,15 +59,10 @@ namespace PetShop.Tests
         [Test]
         public void Test_Delete_Product_Failed()
         {
-            var domain = "bo";
-            var name = "dog chow";
-            var entity = new ProductEntity()
-            {
-                guid = Guid.NewGuid().ToString(),
-                ETag = ETag.All,
-                domain = domain,
-                name = name
-            };
+            var product = ProductFixture.GetProduct();
+            var domain = product.domain;
+            var name = product.name;
+            
 
             var loggerMock = new TestLogger<ProductService>();
             var productRepositoryMock = new Mock<IProductRepository>();

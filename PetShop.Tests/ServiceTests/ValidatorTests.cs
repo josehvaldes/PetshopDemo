@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace PetShop.Tests
+namespace PetShop.Tests.ServiceTests
 {
     [TestFixture]
     public class ValidatorTests

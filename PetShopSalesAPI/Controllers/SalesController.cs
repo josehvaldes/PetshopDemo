@@ -81,5 +81,11 @@ namespace PetShopAPI.Controllers
             }
         }
 
+        [HttpGet()]
+        public async Task<IActionResult> RecommentSales([FromQuery] string userId)
+        {
+            await Task.FromResult(0);
+            return Ok();
+        }
     }
 }

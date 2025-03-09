@@ -8,7 +8,7 @@ using PetShop.Service;
 using Moq;
 using PetShop.Data;
 
-namespace PetShop.Tests
+namespace PetShop.Tests.ServiceTests
 {
     [TestFixture]
     public class UserServiceTests

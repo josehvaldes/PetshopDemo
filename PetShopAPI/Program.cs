@@ -111,8 +111,22 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseAuthorization();
-app.UseMiddleware<JwtMiddleware>();
+
+if (TestingMode)
+{
+    app.UseMiddleware<TestingMiddleware>();
+}
+else 
+{
+    app.UseMiddleware<JwtMiddleware>();
+}
 
 app.MapControllers();
 
 app.Run();
+
+
+public partial class Program 
+{
+    public static bool TestingMode = false;
+}

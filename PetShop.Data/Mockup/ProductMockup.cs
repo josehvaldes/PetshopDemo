@@ -9,7 +9,7 @@ namespace PetShop.Data.Mockup
 {
     public class ProductMockup : IProductRepository
     {
-        internal static List<ProductEntity> _productMockups = new List<ProductEntity>() {
+        public static List<ProductEntity> _productMockups = new List<ProductEntity>() {
 
             new ProductEntity(){
                 guid="19a31d90-8123-4288-b9a6-e704aadde359",

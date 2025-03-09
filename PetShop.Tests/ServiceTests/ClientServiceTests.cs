@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Tests
+namespace PetShop.Tests.ServiceTests
 {
     [TestFixture]
     public class ClientServiceTests

@@ -34,6 +34,11 @@ namespace PetShopAPI.Controllers
             }
         }
 
-
+        [HttpGet("HealthCheck")]
+        public IActionResult Get() 
+        {
+            _logger.LogWarning("Wndpoint working well");
+            return Ok();
+        }
     }
 }
