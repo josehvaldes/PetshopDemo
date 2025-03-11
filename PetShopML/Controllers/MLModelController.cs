@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace PetShopML.Controllers
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class MLModelController : ControllerBase
     {
         private readonly ILogger<MLModelController> _logger;
@@ -21,10 +23,10 @@ namespace PetShopML.Controllers
         {
             await Task.FromResult(0);
             _logger.LogWarning("Ping completed");
-            return Ok();
+            return Ok(new {message = "Health" });
         }
 
-
+        [HttpGet("Predict")]
         public async Task<IActionResult> Predict() 
         {
 

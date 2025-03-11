@@ -402,3 +402,5 @@ PetShopAPI/appsettings.Development.json
 PetShopSalesAPI/appsettings.Development.json
 PetShopAPI/Logfiles/*
 PetShopSalesAPI/Logfiles/*
+PetShopML/Logfiles/*
+PetShopML/appsettings.Development.json

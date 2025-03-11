@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.ML;
 using Microsoft.OpenApi.Models;
+using Okta.AspNetCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,8 +24,24 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services.AddPredictionEnginePool<object, object>()
-    .FromUri(modelName: "", uri: "");
+//builder.Services.AddPredictionEnginePool<object, object>()
+//    .FromUri(modelName: "", uri: "");
+
+
+var oktasetting = builder.Configuration.GetSection("OktaSettings");
+
+//Add Okta authentication
+builder.Services.AddAuthentication(
+    options =>
+    {
+        options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
+        options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
+        options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+    }
+).AddOktaWebApi(new OktaWebApiOptions()
+{
+    OktaDomain = oktasetting.GetValue<string>("urlDomain")
+});
 
 // Add services to the container.
 
@@ -33,8 +50,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API - V1", Version = "v1.0" });
-    c.SwaggerDoc("v2", new OpenApiInfo { Title = "My API - V2", Version = "v2.0" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ML API - V1", Version = "v1.0" });
+    c.SwaggerDoc("v2", new OpenApiInfo { Title = "ML API - V2", Version = "v2.0" });
 });
 
 //Add support to logging with SERILOG
@@ -58,6 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
