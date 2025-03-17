@@ -9,5 +9,7 @@ namespace Petshop.Common.Settings
     public class AzureSettings
     {
         public string StorageURI { get; set; } = string.Empty;
+        public string AppConfiguration { get; set; } = string.Empty;
+        
     }
 }

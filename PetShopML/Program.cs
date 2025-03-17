@@ -1,12 +1,10 @@
 using Asp.Versioning;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.ML;
 using Microsoft.OpenApi.Models;
 using Okta.AspNetCore;
 using Serilog;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 
 builder.Services.AddApiVersioning(options =>
@@ -24,11 +22,16 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-//builder.Services.AddPredictionEnginePool<object, object>()
-//    .FromUri(modelName: "", uri: "");
+var azureSettings = builder.Configuration.GetSection("azureSettings");
+string endpoint = azureSettings.GetValue<string>("AppConfiguration")?? throw new InvalidOperationException("The setting 'azureSettings:AppConfiguration' was not found.");
 
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    options.Connect(new Uri(endpoint), new DefaultAzureCredential());
+});
 
-var oktasetting = builder.Configuration.GetSection("OktaSettings");
+var oktasetting = builder.Configuration.GetSection("mlpetshopapp:oktasettings");
+var oktaDomain = oktasetting.GetValue<string>("urldomain") ?? throw new InvalidOperationException("The setting 'oktaSetting:urlDomain' was not found.");
 
 //Add Okta authentication
 builder.Services.AddAuthentication(
@@ -40,8 +43,12 @@ builder.Services.AddAuthentication(
     }
 ).AddOktaWebApi(new OktaWebApiOptions()
 {
-    OktaDomain = oktasetting.GetValue<string>("urlDomain")
+    OktaDomain = oktaDomain
 });
+
+
+//builder.Services.AddPredictionEnginePool<object, object>()
+//    .FromUri(modelName: "", uri: "");
 
 // Add services to the container.
 

@@ -3,6 +3,7 @@ using Azure.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FeatureManagement;
 using PetShop.Model;
 using PetShop.Service;
 using PetShopSalesAPI.Auth;
@@ -13,17 +14,20 @@ namespace PetShopAPI.Controllers
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize] Remove authorize for testing
     public class SalesController : ControllerBase
     {
         private readonly ILogger<SalesController> _logger;
         private readonly IValidator<SalesRequest> _salesRequestValidator;
         private readonly ISaleService _saleService;
-        public SalesController(ILogger<SalesController> logger, IValidator<SalesRequest> salesRequestValidator, ISaleService saleService) 
+        private readonly IFeatureManager _featureManager;
+
+        public SalesController(ILogger<SalesController> logger, IValidator<SalesRequest> salesRequestValidator, ISaleService saleService, IFeatureManager featureManager) 
         {
             _logger = logger;
             _salesRequestValidator = salesRequestValidator;
             _saleService = saleService;
+            _featureManager = featureManager;
         }
 
 
@@ -81,11 +85,12 @@ namespace PetShopAPI.Controllers
             }
         }
 
-        [HttpGet()]
-        public async Task<IActionResult> RecommentSales([FromQuery] string userId)
+        [HttpGet("Recommended")]
+        public async Task<IActionResult> RecommentSales()
         {
+            var isEnableMockSales = await _featureManager.IsEnabledAsync("mocksales");
             await Task.FromResult(0);
-            return Ok();
+            return Ok($" Enable MockSales: {isEnableMockSales}");
         }
     }
 }
