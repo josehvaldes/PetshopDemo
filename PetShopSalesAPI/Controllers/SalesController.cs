@@ -8,7 +8,9 @@ using PetShop.Model;
 using PetShop.Service;
 using PetShopSalesAPI.Auth;
 using PetShopSalesAPI.Extensions;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("PetShop.Tests")]
 namespace PetShopAPI.Controllers
 {
     [ApiVersion(1)]
@@ -44,10 +46,10 @@ namespace PetShopAPI.Controllers
                     return UnprocessableEntity(ModelState);
                 }
 
-                var user = (User?)HttpContext.Items["User"];
+                var user = (User?)HttpContext?.Items["User"]??null;
                 if (user == null)
                 {
-                    return BadRequest("Authorized user not found");
+                    return BadRequest(new { Error = new[] { "Authorized user not found" } } );
                 }
 
                 request.Username = user?.UserName ?? string.Empty;

@@ -29,8 +29,8 @@ namespace PetShop.Tests.ServiceTests
             var userEntity = new UserEntity();
             var productEntity = new ProductEntity();
 
-            userServiceMock.Setup(m=> m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<UserEntity?>(null));
-            productRepositoryMock.Setup( m=> m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(productEntity));
+            userServiceMock.Setup(m=> m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((UserEntity?)null);
+                productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
 
             var saleService = new SaleService(userServiceMock.Object, 
                 productRepositoryMock.Object, 
@@ -65,8 +65,8 @@ namespace PetShop.Tests.ServiceTests
 
             var userEntity = new UserEntity();
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<UserEntity?>(userEntity));
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(null));
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((ProductEntity?)null);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -107,9 +107,9 @@ namespace PetShop.Tests.ServiceTests
                 fullname="mismatch"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<UserEntity?>(userEntity));
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(productEntity));
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).Returns(Task.FromResult<ClientEntity?>(clientEntity));
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -157,9 +157,9 @@ namespace PetShop.Tests.ServiceTests
                 fullname = "test"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<UserEntity?>(userEntity));
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(productEntity));
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).Returns(Task.FromResult<ClientEntity?>(clientEntity));
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -211,9 +211,9 @@ namespace PetShop.Tests.ServiceTests
                 fullname = "test"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<UserEntity?>(userEntity));
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(productEntity));
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).Returns(Task.FromResult<ClientEntity?>(clientEntity));
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -265,9 +265,9 @@ namespace PetShop.Tests.ServiceTests
                 fullname = "test"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<UserEntity?>(userEntity));
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(productEntity));
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).Returns(Task.FromResult<ClientEntity?>(clientEntity));
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -320,9 +320,9 @@ namespace PetShop.Tests.ServiceTests
                 saleid = "98-989-9",
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<UserEntity?>(userEntity));
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(productEntity));
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).Returns(Task.FromResult<ClientEntity?>(clientEntity));
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
             salesRepositoryMock.Setup(m=>m.Create(It.IsAny<SaleEntity>())).Returns(Task.FromResult<SaleEntity?>(saleEntity));
             productRepositoryMock.Setup(m => m.Update(It.IsAny<ProductEntity>())).ReturnsAsync(true);
 

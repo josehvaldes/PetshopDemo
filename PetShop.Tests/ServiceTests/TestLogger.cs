@@ -18,7 +18,6 @@ namespace PetShop.Tests.ServiceTests
 
         public IDisposable? BeginScope<TState>(TState state) where TState : notnull
         {
-            //throw new NotImplementedException();
             return null;
         }
 

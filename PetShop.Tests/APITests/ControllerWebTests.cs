@@ -29,12 +29,12 @@ namespace PetShop.Tests.APITests
         [SetUp]
         public void Setup() 
         {
-            _client = _factory.CreateClient();
+            //_client = _factory.CreateClient();
         }
 
         public void Dispose() 
         {
-            _factory?.Dispose();
+            //_factory?.Dispose();
         } 
 
         [Test]

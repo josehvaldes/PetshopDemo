@@ -70,7 +70,7 @@ namespace PetShop.Tests.ServiceTests
             var taxNumber = "654321";
             var loggerMock = new TestLogger<ClientService>();
             var clientRepositoryMock = new Mock<IClientRepository>();
-            clientRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ClientEntity?>(null));
+            clientRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((ClientEntity?)null);
             clientRepositoryMock.Setup(m => m.Delete(It.IsAny<ClientEntity>())).ReturnsAsync(true);
 
             var clientService = new ClientService(loggerMock, clientRepositoryMock.Object);
