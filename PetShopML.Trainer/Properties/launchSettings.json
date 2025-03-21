@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PetShopML.Trainer": {
+      "commandName": "Project",
+      "commandLineArgs": "\\test"
+    }
+  }
+}

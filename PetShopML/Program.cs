@@ -3,6 +3,12 @@ using Microsoft.OpenApi.Models;
 using Okta.AspNetCore;
 using Serilog;
 using Azure.Identity;
+using Microsoft.Extensions.ML;
+using PetShopML.Model;
+using Petshop.Common.Settings;
+using System.Reflection.Metadata;
+using PetShopML.ModelAccess;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,13 +28,18 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-var azureSettings = builder.Configuration.GetSection("azureSettings");
-string endpoint = azureSettings.GetValue<string>("AppConfiguration")?? throw new InvalidOperationException("The setting 'azureSettings:AppConfiguration' was not found.");
+var azureSettings = builder.Configuration.GetSection("AzureSettings");
 
-builder.Configuration.AddAzureAppConfiguration(options =>
-{
-    options.Connect(new Uri(endpoint), new DefaultAzureCredential());
-});
+string appConfigEndpoint = azureSettings.GetValue<string>("AppConfiguration")?? throw new InvalidOperationException("The setting 'azureSettings:AppConfiguration' was not found.");
+string regressionBlobUri = azureSettings.GetValue<string>("RegressionBlobStorageURI") ?? throw new InvalidOperationException("The setting 'azureSettings:RegressionBlobStorageURI' was not found.");
+string product988TimeSeriesUri = azureSettings.GetValue<string>("Product988TimeSeriesURI") ?? throw new InvalidOperationException("The setting 'azureSettings:RegressionBlobStorageURI' was not found.");
+
+builder.Services.Configure<AzureSettings>(azureSettings);
+
+//builder.Configuration.AddAzureAppConfiguration(options =>
+//{
+//    options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential());
+//});
 
 var oktasetting = builder.Configuration.GetSection("mlpetshopapp:oktasettings");
 var oktaDomain = oktasetting.GetValue<string>("urldomain") ?? throw new InvalidOperationException("The setting 'oktaSetting:urlDomain' was not found.");
@@ -46,9 +57,14 @@ builder.Services.AddAuthentication(
     OktaDomain = oktaDomain
 });
 
+var stream = BlobStorageAccess.GetRegressionModel(regressionBlobUri);
 
-//builder.Services.AddPredictionEnginePool<object, object>()
-//    .FromUri(modelName: "", uri: "");
+builder.Services.AddPredictionEnginePool<SaleData, SalesPrediction>()
+    .FromUri(modelName: "PershopSalesModel_V1", uri: regressionBlobUri);
+
+builder.Services.AddPredictionEnginePool<SaleData, ProductUnitTimeSeriesPrediction>()
+    .FromUri(modelName: "Product988TimeSeries", uri: product988TimeSeriesUri);
+
 
 // Add services to the container.
 

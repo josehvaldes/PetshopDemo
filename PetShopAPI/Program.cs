@@ -42,8 +42,8 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-
-builder.Services.Configure<AzureSettings>(builder.Configuration.GetSection("AzureSettings"));
+var azureSettings = builder.Configuration.GetSection("AzureSettings");
+builder.Services.Configure<AzureSettings>(azureSettings);
 
 
 var apisetting = builder.Configuration.GetSection("ApiSettings");
