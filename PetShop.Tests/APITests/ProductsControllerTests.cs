@@ -11,6 +11,7 @@ using PetShop.Tests.ServiceTests;
 using PetShopAPI.Controllers;
 using PetShopAPI.Validators;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,11 +22,18 @@ namespace PetShop.Tests.APITests
     public class ProductsControllerTests
     {
 
-        private ILogger<ProductsController> _loggerMock;
-        private Mock<IProductService> _productServiceMock;
-        private IValidator<ProductRequest> _productRequestValidator;
+        private ILogger<ProductsController> _loggerMock = null!;
+        private Mock<IProductService> _productServiceMock = null!;
+        private IValidator<ProductRequest> _productRequestValidator = null!;
 
-        public ProductsControllerTests() 
+
+        private ProductsController CreateController()
+        {
+            return new ProductsController(_productServiceMock.Object, _loggerMock, _productRequestValidator);
+        }   
+
+        [SetUp]
+        public void SetUp()
         {
             _productServiceMock = new Mock<IProductService>();
             _loggerMock = new TestLogger<ProductsController>();
@@ -36,20 +44,20 @@ namespace PetShop.Tests.APITests
         public void GetProducts_AvailablesOnly_Success() 
         {
             var mockList = ProductFixture.GetProductList().Where( x=> x.domain == "us" && x.pettype == "dog" && x.stock >0).ToList();
-            string domain = "bo";
+            string domain = "us";
             string type = "dog";
 
             _productServiceMock.Setup(m => m.RetrieveAvailablesList(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(mockList);
 
-            var controller = new ProductsController(_productServiceMock.Object, _loggerMock, _productRequestValidator);
+            var controller = CreateController();
             var result = controller.GetProducts(domain, type, true).Result;
 
             result.Should().BeOfType<OkObjectResult>();
             OkObjectResult objectResult = (OkObjectResult)result;
             objectResult.StatusCode.Should().Be(200);
-            objectResult.Value.Should().BeOfType<List<ProductEntity>>();
+            objectResult.Value.Should().BeOfType<IEnumerable<ProductEntity>>();
 
-            IEnumerable<ProductEntity> list = (List<ProductEntity>)objectResult.Value;
+            IEnumerable<ProductEntity> list = (IEnumerable<ProductEntity>)objectResult.Value;
             list.Count().Should().Be(1);
         }
 
@@ -58,23 +66,73 @@ namespace PetShop.Tests.APITests
         {
             var mockList = ProductFixture.GetProductList().Where(x => x.domain == "us" && x.pettype == "dog").ToList();
 
-            _productServiceMock.Setup(m => m.RetrieveAvailablesList(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(mockList);
+            _productServiceMock.Setup(m => m.RetrieveAllList(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(mockList);
 
-            var controller = new ProductsController(_productServiceMock.Object, _loggerMock, _productRequestValidator);
+            var controller = CreateController();
 
-            string domain = "bo";
+            string domain = "us";
             string type = "dog";
 
-            var result = controller.GetProducts(domain, type, true).Result;
+            var result = controller.GetProducts(domain, type, false).Result;
 
             result.Should().BeOfType<OkObjectResult>();
             OkObjectResult objectResult = (OkObjectResult)result;
             objectResult.StatusCode.Should().Be(200);
             objectResult.Value.Should().BeOfType<List<ProductEntity>>();
 
-            IEnumerable<ProductEntity> list = (List<ProductEntity>)objectResult.Value;
+            List<ProductEntity> list = (List<ProductEntity>)objectResult.Value;
             list.Count().Should().Be(2);
 
+        }
+
+        [Test]
+        public void GetProducts_NoProductsAvailable_ReturnsEmptyList()
+        {
+            string domain = "us";
+            string type = "dog";
+
+            _productServiceMock.Setup(m => m.RetrieveAvailablesList(domain, type)).ReturnsAsync(new List<ProductEntity>());
+
+            var controller = CreateController();
+
+            var result = controller.GetProducts(domain, type, true).Result;
+
+            result.Should().BeOfType<OkObjectResult>();
+            var objectResult = (OkObjectResult)result;
+            objectResult.StatusCode.Should().Be(200);
+
+            var list = (IEnumerable<ProductEntity>)objectResult.Value;
+            list.Should().BeEmpty();
+        }
+
+
+        [Test]
+        public void CreateProduct_InvalidRequest_ReturnsBadRequest()
+        {
+            var invalidRequest = new ProductRequest { Name = "", Domain = "" }; // Invalid data
+
+            var controller = CreateController();
+
+            var result = controller.CreateProduct(invalidRequest).Result;
+
+            result.Should().BeOfType<UnprocessableEntityObjectResult>();
+            var objectResult = (UnprocessableEntityObjectResult)result;
+            objectResult.StatusCode.Should().Be(422);
+        }
+
+        [Test]
+        public void DeleteProduct_ValidRequest_ReturnsNoContent()
+        {
+            string domain = "us";
+            string name = "dog-food";
+
+            _productServiceMock.Setup(m => m.Delete(domain, name)).ReturnsAsync(true);
+
+            var controller = CreateController();
+
+            var result = controller.DeleteProduct(domain, name).Result;
+
+            result.Should().BeOfType<OkObjectResult>();
         }
     }
 }

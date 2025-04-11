@@ -13,7 +13,6 @@ namespace PetShopML.Trainer
     public class PetShopTrainer
     {
         private MLContext _mlContext;
-        private bool _overwrite = false;
         public MLContext ModelContext { get { return _mlContext; } }
 
         public PetShopTrainer() 
@@ -21,13 +20,7 @@ namespace PetShopML.Trainer
             _mlContext = new MLContext(seed: 1);
         }
 
-
-        public void Init( int version=1, bool overwrite = false) 
-        {
-            _overwrite = overwrite;
-        }
-
-        public bool Train(string dataPath, string outputModelPath) 
+        public bool Train(string dataPath, string outputModelPath, bool overwrite = false) 
         {
             try 
             {
@@ -53,7 +46,7 @@ namespace PetShopML.Trainer
 
                 if (File.Exists(outputModelPath))
                 {
-                    if (!_overwrite)
+                    if (!overwrite)
                     {
                         throw new InvalidDataException("Model already exists");
                     }

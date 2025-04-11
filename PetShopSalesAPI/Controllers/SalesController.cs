@@ -16,7 +16,7 @@ namespace PetShopAPI.Controllers
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize] Remove authorize for testing
+    [Authorize] //Remove authorize for testing
     public class SalesController : ControllerBase
     {
         private readonly ILogger<SalesController> _logger;

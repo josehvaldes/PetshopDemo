@@ -19,8 +19,7 @@ if (args.Length>0)
     if (args[0] == "\\train")
     {
         var trainer = new PetShopTrainer();
-        trainer.Init(version, true);
-        var completed = trainer.Train(dataPath, regressionModelPath);
+        var completed = trainer.Train(dataPath, regressionModelPath, true);
 
     }
     else if (args[0] == "\\test")

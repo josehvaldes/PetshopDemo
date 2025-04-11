@@ -6,34 +6,34 @@ namespace PetShopML.Model
     {
         // The index of column in LoadColumn(int index) should be matched with the position of columns in the underlying data file.
         // The next column is used by the Regression algorithm as the Label (e.g. the value that is being predicted by the Regression model).
-        [LoadColumn(0)]
+        [LoadColumn(9)]
         public float next;
 
-        [LoadColumn(1)]
+        [LoadColumn(0)]
         public float productId;
 
-        [LoadColumn(2)]
+        [LoadColumn(1)]
         public float year;
 
-        [LoadColumn(3)]
+        [LoadColumn(2)]
         public float month;
 
-        [LoadColumn(4)]
+        [LoadColumn(3)]
         public float units;
 
-        [LoadColumn(5)]
+        [LoadColumn(4)]
         public float avg;
 
-        [LoadColumn(6)]
+        [LoadColumn(5)]
         public float count;
 
-        [LoadColumn(7)]
+        [LoadColumn(6)]
         public float max;
 
-        [LoadColumn(8)]
+        [LoadColumn(7)]
         public float min;
 
-        [LoadColumn(9)]
+        [LoadColumn(8)]
         public float prev;
     }
 }
