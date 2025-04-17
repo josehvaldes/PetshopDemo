@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.Application.Interfaces
+namespace PetShop.Application.Interfaces.Repository
 {
     public interface IProductRepository
     {

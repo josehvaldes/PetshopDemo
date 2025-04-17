@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Settings;
 using PetShopAPI.Auth;
 using System.Data;

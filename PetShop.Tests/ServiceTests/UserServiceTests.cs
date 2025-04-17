@@ -4,8 +4,8 @@ using PetShopAPI.Auth;
 using FluentAssertions;
 using Moq;
 using PetShop.Domain.Entities;
-using PetShop.Application.Interfaces;
 using PetShop.Application.Services;
+using PetShop.Application.Interfaces.Repository;
 
 namespace PetShop.Tests.ServiceTests
 {

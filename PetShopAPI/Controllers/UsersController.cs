@@ -5,11 +5,11 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.Application.Auth;
-using PetShop.Application.Interfaces;
 using PetShopAPI.Auth;
 using PetShopAPI.Extensions;
 using PetShopAPI.Models;
 using PetShop.Domain.Entities;
+using PetShop.Application.Interfaces.Services;
 
 namespace PetShopAPI.Controllers
 {

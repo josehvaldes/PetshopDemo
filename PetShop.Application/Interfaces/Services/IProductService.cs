@@ -1,7 +1,7 @@
 ﻿using PetShop.Application.Requests;
 using PetShop.Domain.Entities;
 
-namespace PetShop.Application.Interfaces
+namespace PetShop.Application.Interfaces.Services
 {
     public interface IProductService
     {

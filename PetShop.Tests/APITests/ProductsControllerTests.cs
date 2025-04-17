@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 using PetShop.Domain.Entities;
 using PetShop.Tests.Mocks;

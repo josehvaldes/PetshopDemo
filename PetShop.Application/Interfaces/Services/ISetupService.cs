@@ -1,8 +1,8 @@
 ﻿using PetShop.Application.Requests;
 
-namespace PetShop.Application.Interfaces
+namespace PetShop.Application.Interfaces.Services
 {
-    public interface ISetupRepository
+    public interface ISetupService
     {
         Task<CallResponse> Setup();
     }

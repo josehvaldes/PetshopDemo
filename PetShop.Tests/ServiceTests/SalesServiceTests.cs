@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 using PetShop.Application.Services;
 using PetShop.Domain.Entities;

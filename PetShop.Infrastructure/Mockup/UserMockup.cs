@@ -1,5 +1,5 @@
 ﻿using Azure;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Repository;
 using PetShop.Domain.Entities;
 
 namespace PetShop.Infrastructure.Mockup

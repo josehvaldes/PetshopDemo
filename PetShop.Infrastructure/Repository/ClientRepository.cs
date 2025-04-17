@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Repository;
 using PetShop.Application.Settings;
 using PetShop.Domain.Entities;
 using PetShop.Infrastructure.Entities;

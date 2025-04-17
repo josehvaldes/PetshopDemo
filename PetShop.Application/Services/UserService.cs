@@ -1,5 +1,6 @@
 ﻿using PetShop.Application.Auth;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 using PetShop.Domain.Entities;
 

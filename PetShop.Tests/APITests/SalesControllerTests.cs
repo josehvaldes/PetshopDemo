@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using PetShopSalesAPI.Auth;
 using PetShop.Application.Requests;
-using PetShop.Application.Interfaces;
 using PetShop.Domain.Entities;
+using PetShop.Application.Interfaces.Services;
 
 
 namespace PetShop.Tests.APITests

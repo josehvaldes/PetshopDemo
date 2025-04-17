@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Services;
 
 namespace PetShopAPI.Controllers
 {

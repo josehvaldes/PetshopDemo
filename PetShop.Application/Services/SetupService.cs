@@ -1,4 +1,5 @@
-﻿using PetShop.Application.Interfaces;
+﻿using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 
 namespace PetShop.Application.Services

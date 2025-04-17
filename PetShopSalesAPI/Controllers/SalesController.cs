@@ -4,7 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
-using PetShop.Application.Interfaces;
+using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 using PetShopSalesAPI.Auth;
 using PetShopSalesAPI.Extensions;
