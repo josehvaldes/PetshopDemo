@@ -2,8 +2,8 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PetShop.Model;
-using PetShop.Service;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Requests;
 using PetShopAPI.Auth;
 using PetShopAPI.Extensions;
 using PetShopAPI.Validators;

@@ -23,13 +23,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Petshop.Common\Petshop.Common.csproj" />
-    <ProjectReference Include="..\PetShop.Data\PetShop.Data.csproj" />
-    <ProjectReference Include="..\PetShop.Service\PetShop.Service.csproj" />
+    <Folder Include="Logfiles\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logfiles\" />
+    <ProjectReference Include="..\PetShop.Application\PetShop.Application.csproj" />
+    <ProjectReference Include="..\PetShop.Domain\PetShop.Domain.csproj" />
+    <ProjectReference Include="..\PetShop.Infrastructure\PetShop.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

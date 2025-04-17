@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
-using PetShop.Model;
-using PetShopSalesAPI.Models;
+using PetShop.Application.Requests;
 
 namespace PetShopSalesAPI.Validators
 {

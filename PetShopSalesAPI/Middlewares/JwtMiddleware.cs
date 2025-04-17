@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Petshop.Common.Settings;
-using PetShop.Service;
+using PetShop.Application.Auth;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Settings;
 using PetShopSalesAPI.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -61,7 +62,7 @@ namespace PetShopSalesAPI.Middlewares
                             var userEntity = userService.Retrieve(domain, username);
                             if (userEntity!=null) 
                             {
-                                context.Items["User"] = new User() { UserName = username, Domain = domain, Roles = roles };
+                                context.Items["User"] = new AuthUser() { UserName = username, Domain = domain, Roles = roles };
                             }
                             //not found in repository then do nothing.
                         }

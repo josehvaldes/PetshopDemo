@@ -16,9 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PetShop.Data\PetShop.Data.csproj" />
-    <ProjectReference Include="..\PetShop.Model\PetShop.Model.csproj" />
-    <ProjectReference Include="..\PetShop.Service\PetShop.Service.csproj" />
     <ProjectReference Include="..\PetShopAPI\PetShopAPI.csproj" />
     <ProjectReference Include="..\PetShopSalesAPI\PetShopSalesAPI.csproj" />
   </ItemGroup>

@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Petshop.Common\Petshop.Common.csproj" />
+    <ProjectReference Include="..\PetShop.Application\PetShop.Application.csproj" />
     <ProjectReference Include="..\PetShopML.Model\PetShopML.Model.csproj" />
   </ItemGroup>
 

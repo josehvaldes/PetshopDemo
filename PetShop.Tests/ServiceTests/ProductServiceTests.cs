@@ -3,15 +3,11 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using PetShop.Data;
-using PetShop.Model;
-using PetShop.Service;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Requests;
+using PetShop.Application.Services;
+using PetShop.Domain.Entities;
 using PetShop.Tests.Mocks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetShop.Tests.ServiceTests
 {
@@ -30,7 +26,7 @@ namespace PetShop.Tests.ServiceTests
 
             var loggerMock = new TestLogger<ProductService>();
             var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(m => m.Create(It.IsAny<ProductEntity>())).Returns(Task.FromResult<ProductEntity?>(product));
+            productRepositoryMock.Setup(m => m.Create(It.IsAny<Product>())).Returns(Task.FromResult<Product?>(product));
 
             var productService = new ProductService(productRepositoryMock.Object, loggerMock);
             var entityResult = productService.Create(request).Result;
@@ -49,7 +45,7 @@ namespace PetShop.Tests.ServiceTests
             var loggerMock = new TestLogger<ProductService>();
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(product);
-            productRepositoryMock.Setup(m => m.Delete(It.IsAny<ProductEntity>())).ReturnsAsync(true);
+            productRepositoryMock.Setup(m => m.Delete(It.IsAny<Product>())).ReturnsAsync(true);
 
             var productService = new ProductService(productRepositoryMock.Object, loggerMock);
             var entityResult = productService.Delete(domain, name).Result;
@@ -66,8 +62,8 @@ namespace PetShop.Tests.ServiceTests
 
             var loggerMock = new TestLogger<ProductService>();
             var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<ProductEntity?>(null));
-            productRepositoryMock.Setup(m => m.Delete(It.IsAny<ProductEntity>())).ReturnsAsync(true);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<Product?>(null));
+            productRepositoryMock.Setup(m => m.Delete(It.IsAny<Product>())).ReturnsAsync(true);
 
             var productService = new ProductService(productRepositoryMock.Object, loggerMock);
             var entityResult = productService.Delete(domain, name).Result;

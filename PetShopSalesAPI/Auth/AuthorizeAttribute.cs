@@ -13,7 +13,7 @@ namespace PetShopSalesAPI.Auth
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (User?)context.HttpContext.Items["User"];
+            var user = (AuthUser?)context.HttpContext.Items["User"];
             if (user == null)
             {
                 context.Result = new JsonResult(new { Error = new[] { "Unauthorized" } }) { StatusCode = StatusCodes.Status401Unauthorized };

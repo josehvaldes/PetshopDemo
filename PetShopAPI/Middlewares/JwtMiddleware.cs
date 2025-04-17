@@ -1,24 +1,39 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Petshop.Common.Settings;
-using PetShop.Service;
+using PetShop.Application.Auth;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Settings;
 using PetShopAPI.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace PetShopAPI.Middlewares
 {
+    /// <summary>
+    /// Middleware to handle JWT authentication and attach user information to the HTTP context.
+    /// </summary>
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ApiSettings _apiSettings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JwtMiddleware"/> class.
+        /// </summary>
+        /// <param name="next">The next middleware in the pipeline.</param>
+        /// <param name="apiSettings">The API settings containing the JWT configuration.</param>
         public JwtMiddleware(RequestDelegate next, IOptions<ApiSettings> apiSettings)
         {
             _next = next;
             _apiSettings = apiSettings.Value;
         }
 
+        /// <summary>
+        /// Middleware invocation method to process the HTTP request.
+        /// </summary>
+        /// <param name="context">The HTTP context of the current request.</param>
+        /// <param name="userService">The user service to retrieve user information.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task Invoke(HttpContext context, IUserService userService)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
@@ -29,58 +44,58 @@ namespace PetShopAPI.Middlewares
             await _next(context);
         }
 
-        private async Task AttachUserToContext(HttpContext context, IUserService userService, string token) 
+        /// <summary>
+        /// Attaches the user information to the HTTP context if the JWT token is valid.
+        /// </summary>
+        /// <param name="context">The HTTP context of the current request.</param>
+        /// <param name="userService">The user service to retrieve user information.</param>
+        /// <param name="token">The JWT token from the request header.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        private async Task AttachUserToContext(HttpContext context, IUserService userService, string token)
         {
-            await Task.Run(() => {
-                try
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_apiSettings.ApiKey);
+
+                var validationParameters = new TokenValidationParameters
                 {
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.ASCII.GetBytes(_apiSettings.ApiKey);
-                    tokenHandler.ValidateToken(token, new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        // set clock skew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                        ClockSkew = TimeSpan.Zero
-                    }, out SecurityToken validatedToken);
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
 
-                    var jwtToken = (JwtSecurityToken)validatedToken;
-                    var username = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
-                    var domain = jwtToken.Claims.First(x => x.Type == "Domain").Value;
-                    var rolesString = jwtToken.Claims.First(x => x.Type == "Roles").Value;
+                tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
 
-                    
-                    if (rolesString != null)
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var username = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+                var domain = jwtToken.Claims.First(x => x.Type == "Domain").Value;
+                var rolesString = jwtToken.Claims.FirstOrDefault(x => x.Type == "Roles")?.Value;
+
+                if (!string.IsNullOrEmpty(rolesString))
+                {
+                    var roles = rolesString.Split(',');
+                    if (roles.Contains(Role.User) || roles.Contains(Role.Administrator))
                     {
-                        //Attach user to context on successful JWT validation
-                        var roles = rolesString.Split(',');
-                        if (roles.Contains(Role.User) || roles.Contains(Role.Administrator)) 
+                        var userEntity = await userService.Retrieve(domain, username);
+                        if (userEntity != null)
                         {
-                            var userEntity = userService.Retrieve(domain, username);
-                            if (userEntity!=null) 
+                            context.Items["User"] = new AuthUser
                             {
-                                context.Items["User"] = new User() { UserName = username, Domain = domain, Roles = roles };
-                            }
-                            //not found in repository then do nothing.
+                                UserName = username,
+                                Domain = domain,
+                                Roles = roles
+                            };
                         }
-                        //else: Not authorized. Do nothing.
-
-                    }
-                    else 
-                    {
-                        //Missing role. Not authorized.
-                        //Do nothing
                     }
                 }
-                catch
-                {
-                    //Do nothing if JWT validation fails
-                    // user is not attached to context so the request won't have access to secure routes
-                }
-            });
-          
+            }
+            catch
+            {
+                // Log the error or handle it appropriately
+            }
         }
     }
 }

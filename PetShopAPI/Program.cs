@@ -4,11 +4,11 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Petshop.Common.Settings;
-using PetShop.Data;
-using PetShop.Data.Azure;
-using PetShop.Data.Mockup;
-using PetShop.Service;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Services;
+using PetShop.Application.Settings;
+using PetShop.Infrastructure.Mockup;
+using PetShop.Infrastructure.Repository;
 using PetShopAPI.Auth;
 using PetShopAPI.Middlewares;
 using PetShopAPI.Models;
@@ -66,10 +66,10 @@ else
     builder.Services.AddScoped<ISaleRepository, SaleMockup>();
 }
 
-builder.Services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddTransient<IPasswordHasher<AuthUser>, PasswordHasher<AuthUser>>();
 builder.Services.AddScoped<IPasswdHasher, PasswdHasher>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAuthUser, AuthUser>();
+builder.Services.AddScoped<IUserAuthentication, UserAuthentication>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ISaleService, SaleService>();

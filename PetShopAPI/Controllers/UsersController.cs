@@ -4,11 +4,12 @@ using Azure.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PetShop.Model;
-using PetShop.Service;
+using PetShop.Application.Auth;
+using PetShop.Application.Interfaces;
 using PetShopAPI.Auth;
 using PetShopAPI.Extensions;
 using PetShopAPI.Models;
+using PetShop.Domain.Entities;
 
 namespace PetShopAPI.Controllers
 {
@@ -17,14 +18,14 @@ namespace PetShopAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IAuthUser _authUser;
+        private readonly IUserAuthentication _authUser;
         private readonly ILogger<UsersController> _logger;
         private readonly IPasswdHasher _passwdHasher;
         private readonly IUserService _userService;
         private readonly IValidator<AuthenticationRequest> _authRequestValidator;
         private readonly IValidator<AddUserRequest> _addUserRequestValidator;
 
-        public UsersController(ILogger<UsersController> logger, IAuthUser authUser, IPasswdHasher passwdHasher, 
+        public UsersController(ILogger<UsersController> logger, IUserAuthentication authUser, IPasswdHasher passwdHasher, 
             IUserService userService, 
             IValidator<AuthenticationRequest> authRequestValidator,
             IValidator<AddUserRequest> addUserRequestValidator) 
@@ -51,9 +52,9 @@ namespace PetShopAPI.Controllers
                     return UnprocessableEntity(ModelState);
                 }
 
-                var hash = _passwdHasher.HashPassword(new User{}, request.Password );
+                var hash = _passwdHasher.HashPassword(new AuthUser(){}, request.Password );
 
-                var userEnitity = new UserEntity() {
+                var userEnitity = new User() {
                     username= request.Username,
                     domain = request.Domain,
                     email = request.Email??string.Empty,

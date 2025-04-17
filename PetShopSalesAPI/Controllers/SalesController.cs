@@ -4,8 +4,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
-using PetShop.Model;
-using PetShop.Service;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Requests;
 using PetShopSalesAPI.Auth;
 using PetShopSalesAPI.Extensions;
 using System.Runtime.CompilerServices;
@@ -46,7 +46,7 @@ namespace PetShopAPI.Controllers
                     return UnprocessableEntity(ModelState);
                 }
 
-                var user = (User?)HttpContext?.Items["User"]??null;
+                var user = (AuthUser?)HttpContext?.Items["User"]??null;
                 if (user == null)
                 {
                     return BadRequest(new { Error = new[] { "Authorized user not found" } } );

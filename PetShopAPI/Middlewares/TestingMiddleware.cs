@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Petshop.Common.Settings;
-using PetShop.Service;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Settings;
 using PetShopAPI.Auth;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -24,7 +24,7 @@ namespace PetShopAPI.Middlewares
 
         public async Task Invoke(HttpContext context, IUserService userService)
         {
-            context.Items["User"] = new User() { UserName = "Test", Domain = "bo", Roles = new string[] { "administrator" } };
+            context.Items["User"] = new AuthUser() { UserName = "Test", Domain = "bo", Roles = new string[] { "administrator" } };
         }
 
     }

@@ -4,18 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using PetShop.Model;
-using PetShop.Service;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Requests;
+using PetShop.Domain.Entities;
 using PetShop.Tests.Mocks;
 using PetShop.Tests.ServiceTests;
 using PetShopAPI.Controllers;
 using PetShopAPI.Validators;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetShop.Tests.APITests
 {
@@ -55,9 +50,9 @@ namespace PetShop.Tests.APITests
             result.Should().BeOfType<OkObjectResult>();
             OkObjectResult objectResult = (OkObjectResult)result;
             objectResult.StatusCode.Should().Be(200);
-            objectResult.Value.Should().BeOfType<IEnumerable<ProductEntity>>();
+            objectResult.Value.Should().BeOfType<List<Product>>();
 
-            IEnumerable<ProductEntity> list = (IEnumerable<ProductEntity>)objectResult.Value;
+            List<Product> list = (List<Product>)objectResult.Value;
             list.Count().Should().Be(1);
         }
 
@@ -78,9 +73,9 @@ namespace PetShop.Tests.APITests
             result.Should().BeOfType<OkObjectResult>();
             OkObjectResult objectResult = (OkObjectResult)result;
             objectResult.StatusCode.Should().Be(200);
-            objectResult.Value.Should().BeOfType<List<ProductEntity>>();
+            objectResult.Value.Should().BeOfType<List<Product>>();
 
-            List<ProductEntity> list = (List<ProductEntity>)objectResult.Value;
+            List<Product> list = (List<Product>)objectResult.Value;
             list.Count().Should().Be(2);
 
         }
@@ -91,7 +86,7 @@ namespace PetShop.Tests.APITests
             string domain = "us";
             string type = "dog";
 
-            _productServiceMock.Setup(m => m.RetrieveAvailablesList(domain, type)).ReturnsAsync(new List<ProductEntity>());
+            _productServiceMock.Setup(m => m.RetrieveAvailablesList(domain, type)).ReturnsAsync(new List<Product>());
 
             var controller = CreateController();
 
@@ -101,7 +96,7 @@ namespace PetShop.Tests.APITests
             var objectResult = (OkObjectResult)result;
             objectResult.StatusCode.Should().Be(200);
 
-            var list = (IEnumerable<ProductEntity>)objectResult.Value;
+            var list = (IEnumerable<Product>)objectResult.Value;
             list.Should().BeEmpty();
         }
 

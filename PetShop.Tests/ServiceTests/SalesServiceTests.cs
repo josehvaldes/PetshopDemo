@@ -1,14 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using PetShop.Data;
-using PetShop.Model;
-using PetShop.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Requests;
+using PetShop.Application.Services;
+using PetShop.Domain.Entities;
 
 namespace PetShop.Tests.ServiceTests
 {
@@ -26,11 +22,11 @@ namespace PetShop.Tests.ServiceTests
             var salesRepositoryMock = new Mock<ISaleRepository>();
             var loggerMock = new TestLogger<ISaleService>();
 
-            var userEntity = new UserEntity();
-            var productEntity = new ProductEntity();
+            var User = new User();
+            var Product = new Product();
 
-            userServiceMock.Setup(m=> m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((UserEntity?)null);
-                productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
+            userServiceMock.Setup(m=> m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((User?)null);
+                productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Product);
 
             var saleService = new SaleService(userServiceMock.Object, 
                 productRepositoryMock.Object, 
@@ -63,10 +59,10 @@ namespace PetShop.Tests.ServiceTests
             var salesRepositoryMock = new Mock<ISaleRepository>();
             var loggerMock = new TestLogger<ISaleService>();
 
-            var userEntity = new UserEntity();
+            var User = new User();
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((ProductEntity?)null);
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(User);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((Product?)null);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -101,15 +97,15 @@ namespace PetShop.Tests.ServiceTests
             var salesRepositoryMock = new Mock<ISaleRepository>();
             var loggerMock = new TestLogger<ISaleService>();
 
-            var userEntity = new UserEntity();
-            var productEntity = new ProductEntity();
-            var clientEntity = new ClientEntity() {
+            var User = new User();
+            var Product = new Product();
+            var client = new Client() {
                 fullname="mismatch"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(User);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Product);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(client);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -147,19 +143,19 @@ namespace PetShop.Tests.ServiceTests
             var salesRepositoryMock = new Mock<ISaleRepository>();
             var loggerMock = new TestLogger<ISaleService>();
 
-            var userEntity = new UserEntity();
-            var productEntity = new ProductEntity() { 
+            var User = new User();
+            var Product = new Product() { 
                 stock=10,
                 name= "dog chow"
             };
-            var clientEntity = new ClientEntity()
+            var Client = new Client()
             {
                 fullname = "test"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(User);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Product);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(Client);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -184,7 +180,7 @@ namespace PetShop.Tests.ServiceTests
             var response = saleService.Create(request).Result;
             response.Should().NotBeNull();
             response.Messages.Should().HaveCount(1);
-            response.Messages.Should().Contain($"Stock unavailable. Product {productEntity.name} stock: {productEntity?.stock}");
+            response.Messages.Should().Contain($"Stock unavailable. Product {Product.name} stock: {Product?.stock}");
 
         }
 
@@ -199,21 +195,21 @@ namespace PetShop.Tests.ServiceTests
             var salesRepositoryMock = new Mock<ISaleRepository>();
             var loggerMock = new TestLogger<ISaleService>();
 
-            var userEntity = new UserEntity();
-            var productEntity = new ProductEntity()
+            var User = new User();
+            var Product = new Product()
             {
                 stock = 10,
                 unitaryprice = 49.9,
                 name = "dog chow"
             };
-            var clientEntity = new ClientEntity()
+            var Client = new Client()
             {
                 fullname = "test"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(User);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Product);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(Client);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -253,21 +249,21 @@ namespace PetShop.Tests.ServiceTests
             var salesRepositoryMock = new Mock<ISaleRepository>();
             var loggerMock = new TestLogger<ISaleService>();
 
-            var userEntity = new UserEntity();
-            var productEntity = new ProductEntity()
+            var User = new User();
+            var Product = new Product()
             {
                 stock = 10,
                 unitaryprice = 49.9,
                 name = "dog chow"
             };
-            var clientEntity = new ClientEntity()
+            var Client = new Client()
             {
                 fullname = "test"
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(User);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Product);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(Client);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -305,26 +301,26 @@ namespace PetShop.Tests.ServiceTests
             var salesRepositoryMock = new Mock<ISaleRepository>();
             var loggerMock = new TestLogger<ISaleService>();
 
-            var userEntity = new UserEntity();
-            var productEntity = new ProductEntity()
+            var User = new User();
+            var Product = new Product()
             {
                 stock = 10,
                 unitaryprice = 49.9,
                 name = "dog chow"
             };
-            var clientEntity = new ClientEntity()
+            var Client = new Client()
             {
                 fullname = "test"
             };
-            var saleEntity = new SaleEntity() {
+            var Sale = new Sale() {
                 saleid = "98-989-9",
             };
 
-            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userEntity);
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(productEntity);
-            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(clientEntity);
-            salesRepositoryMock.Setup(m=>m.Create(It.IsAny<SaleEntity>())).Returns(Task.FromResult<SaleEntity?>(saleEntity));
-            productRepositoryMock.Setup(m => m.Update(It.IsAny<ProductEntity>())).ReturnsAsync(true);
+            userServiceMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(User);
+            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Product);
+            clientServiceMock.Setup(m => m.Retrieve(It.IsAny<string>())).ReturnsAsync(Client);
+            salesRepositoryMock.Setup(m=>m.Create(It.IsAny<Sale>())).Returns(Task.FromResult<Sale?>(Sale));
+            productRepositoryMock.Setup(m => m.Update(It.IsAny<Product>())).ReturnsAsync(true);
 
             var saleService = new SaleService(userServiceMock.Object,
                 productRepositoryMock.Object,
@@ -349,9 +345,9 @@ namespace PetShop.Tests.ServiceTests
             var response = saleService.Create(request).Result;
 
             //verify reduced stock
-            productEntity.stock.Should().Be(8);
+            Product.stock.Should().Be(8);
 
-            response.SaleId.Should().Be(saleEntity.saleid);
+            response.SaleId.Should().Be(Sale.saleid);
 
             response.Should().NotBeNull();
             response.Messages.Should().BeEmpty();

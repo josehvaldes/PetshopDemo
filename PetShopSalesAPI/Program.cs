@@ -8,11 +8,11 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
-using Petshop.Common.Settings;
-using PetShop.Data;
-using PetShop.Data.Azure;
-using PetShop.Data.Mockup;
-using PetShop.Service;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Services;
+using PetShop.Application.Settings;
+using PetShop.Infrastructure.Mockup;
+using PetShop.Infrastructure.Repository;
 using PetShopSalesAPI.Auth;
 using PetShopSalesAPI.Validators;
 using Serilog;
@@ -90,10 +90,10 @@ else
     AddMocksToScope(builder.Services);
 }
 
-builder.Services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddTransient<IPasswordHasher<AuthUser>, PasswordHasher<AuthUser>>();
 builder.Services.AddScoped<IPasswdHasher, PasswdHasher>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAuthUser, AuthUser>();
+builder.Services.AddScoped<IUserAuthentication, UserAuthentication>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ISaleService, SaleService>();

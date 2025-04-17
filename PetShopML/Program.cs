@@ -5,10 +5,8 @@ using Serilog;
 using Azure.Identity;
 using Microsoft.Extensions.ML;
 using PetShopML.Model;
-using Petshop.Common.Settings;
-using System.Reflection.Metadata;
 using PetShopML.ModelAccess;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using PetShop.Application.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 

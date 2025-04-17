@@ -1,16 +1,11 @@
 ﻿using Azure;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using PetShop.Data;
-using PetShop.Model;
-using PetShop.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PetShop.Application.Interfaces;
+using PetShop.Application.Requests;
+using PetShop.Application.Services;
+using PetShop.Domain.Entities;
 
 namespace PetShop.Tests.ServiceTests
 {
@@ -26,16 +21,15 @@ namespace PetShop.Tests.ServiceTests
                 FullName = "Test test"
             };
 
-            var entity = new ClientEntity() 
+            var entity = new Client() 
             {
                 guid = Guid.NewGuid().ToString(),
-                ETag = ETag.All,
                 fullname = request.FullName,
                 taxnumber = request.TaxNumber,
             };
             var loggerMock = new TestLogger<ClientService>();
             var clientRepositoryMock = new Mock<IClientRepository>();
-            clientRepositoryMock.Setup(m => m.Create(It.IsAny<ClientEntity>())).Returns(Task.FromResult<ClientEntity?>(entity));
+            clientRepositoryMock.Setup(m => m.Create(It.IsAny<Client>())).Returns(Task.FromResult<Client?>(entity));
 
             var clientService = new ClientService(loggerMock, clientRepositoryMock.Object);
             var entityResult = clientService.Create(request).Result;
@@ -47,17 +41,16 @@ namespace PetShop.Tests.ServiceTests
         [Test]
         public void Test_Delete_Client()
         {
-            var entity = new ClientEntity()
+            var entity = new Client()
             {
                 guid = Guid.NewGuid().ToString(),
-                ETag = ETag.All,
                 fullname = "test",
                 taxnumber = "654321",
             };
             var loggerMock = new TestLogger<ClientService>();
             var clientRepositoryMock = new Mock<IClientRepository>();
             clientRepositoryMock.Setup(m=> m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(entity);
-            clientRepositoryMock.Setup(m => m.Delete(It.IsAny<ClientEntity>())).ReturnsAsync(true);
+            clientRepositoryMock.Setup(m => m.Delete(It.IsAny<Client>())).ReturnsAsync(true);
 
             var clientService = new ClientService(loggerMock, clientRepositoryMock.Object);
             var entityResult = clientService.Delete("654321").Result;
@@ -70,8 +63,8 @@ namespace PetShop.Tests.ServiceTests
             var taxNumber = "654321";
             var loggerMock = new TestLogger<ClientService>();
             var clientRepositoryMock = new Mock<IClientRepository>();
-            clientRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((ClientEntity?)null);
-            clientRepositoryMock.Setup(m => m.Delete(It.IsAny<ClientEntity>())).ReturnsAsync(true);
+            clientRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((Client?)null);
+            clientRepositoryMock.Setup(m => m.Delete(It.IsAny<Client>())).ReturnsAsync(true);
 
             var clientService = new ClientService(loggerMock, clientRepositoryMock.Object);
             var entityResult = clientService.Delete(taxNumber).Result;

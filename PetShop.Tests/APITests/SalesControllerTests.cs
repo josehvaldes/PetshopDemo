@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
-using PetShop.Model;
-using PetShop.Service;
 using PetShopAPI.Controllers;
 using Microsoft.FeatureManagement;
 using NUnit.Framework;
@@ -11,6 +9,9 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using PetShopSalesAPI.Auth;
+using PetShop.Application.Requests;
+using PetShop.Application.Interfaces;
+using PetShop.Domain.Entities;
 
 
 namespace PetShop.Tests.APITests
@@ -27,7 +28,7 @@ namespace PetShop.Tests.APITests
         {
             var controller = new SalesController(_logger, _salesRequestValidator.Object, _saleService.Object, _featureManager.Object);
             var context = new DefaultHttpContext();
-            context.Items.Add("User", new User { UserName = "local", Domain = string.Empty });
+            context.Items.Add("User", new AuthUser { UserName = "local", Domain = string.Empty });
             controller.ControllerContext.HttpContext = context;
             return controller;
         }
@@ -46,7 +47,7 @@ namespace PetShop.Tests.APITests
         public void RetrieveSales_WithValidDomain_ReturnsOkWithSalesList()
         {
             string domain = "bo";
-            List<SaleEntity> list = new List<SaleEntity>() { new SaleEntity() { domain="bo", saleid = "1" } };
+            List<Sale> list = new List<Sale>() { new Sale() { domain="bo", saleid = "1" } };
             _saleService.Setup(m => m.RetrieveList(domain)).ReturnsAsync(list);
 
             var salesController = CreateController();
@@ -56,7 +57,7 @@ namespace PetShop.Tests.APITests
             result.Should().BeOfType<OkObjectResult>();
             OkObjectResult objectResult = (OkObjectResult)result;
             objectResult.StatusCode.Should().Be(200);
-            IEnumerable<SaleEntity> value = (IEnumerable<SaleEntity>)objectResult.Value;
+            IEnumerable<Sale> value = (IEnumerable<Sale>)objectResult.Value;
             value.Should().NotBeNullOrEmpty();
             value.Should().HaveCount(1);
             value.First().domain.Should().Be("bo");
@@ -76,7 +77,12 @@ namespace PetShop.Tests.APITests
             result.Should().BeOfType<ObjectResult>();
             var objectResult = (ObjectResult)result;
             objectResult.StatusCode.Should().Be(500);
-            objectResult.Value.Should().Be("Service error");
+            dynamic obj = objectResult.Value;
+            //obj.Should().NotBeNull();
+            string[] errors = obj.Error;
+            errors.Should().NotBeNullOrEmpty();
+            errors.Should().Contain("Service error");
+
         }
 
         [TestCase("Completed", 200, typeof(OkObjectResult))]
