@@ -20,4 +20,3 @@ updates:
     labels:                     # Optional: add labels to PRs
       - "dependencies"
       - "automated"
-    versioning-strategy: "increase" # Options: auto, increase, lockfile-only, or wip (work in progress)
