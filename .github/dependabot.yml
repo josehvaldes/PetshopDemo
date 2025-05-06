@@ -5,6 +5,11 @@ updates:
       - "/PetShopSalesAPI"
       - "/PetShopAPI"
       - "/PetShopML"
+      - "/PetShop.Application"
+      - "/PetShop.Domain"
+      - "/PetShop.Infrastructure"
+      - "/PetShopML.Model"
+      - "/PetShopML.Trainer"
     schedule:
       interval: "weekly"         # Checks weekly (options: daily, weekly, monthly)
     open-pull-requests-limit: 5 # Limits number of open PRs
