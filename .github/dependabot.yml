@@ -3,11 +3,11 @@ updates:
   - package-ecosystem: "nuget"  # For .NET dependencies
     directories: # Locations of the project files
       - "/PetShopSalesAPI"
+      - "/PetShopAPI"
+      - "/PetShopML"
     schedule:
       interval: "weekly"         # Checks weekly (options: daily, weekly, monthly)
     open-pull-requests-limit: 5 # Limits number of open PRs
-    reviewers:                  # Optional: add reviewers
-      - "josehvaldes"
     labels:                     # Optional: add labels to PRs
       - "dependencies"
       - "automated"
