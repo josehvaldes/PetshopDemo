@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"  # For .NET dependencies
+    directories: # Locations of the project files
+      - "/PetShop.Application"        
+      - "/PetShop.Domain"            
+      - "/PetShop.Infrastructure"   
+      - "/PetShop.Web"              
+      - "/PetShop.Tests"            
+      - "/PetShopAPI"             
+      - "/PetShopML"           
+      - "/PetShopML.Model"       
+      - "/PetShopML.Trainer"       
+      - "/PetShopSalesAPI"
+    schedule:
+      interval: "weekly"         # Checks weekly (options: daily, weekly, monthly)
+    open-pull-requests-limit: 5 # Limits number of open PRs
+    reviewers:                  # Optional: add reviewers
+      - "josehvaldes"
+    labels:                     # Optional: add labels to PRs
+      - "dependencies"
+      - "automated"
+    versioning-strategy: "increase" # Options: auto, increase, lockfile-only, or wip (work in progress)
