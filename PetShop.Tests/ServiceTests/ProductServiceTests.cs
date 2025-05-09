@@ -1,7 +1,5 @@
-﻿using Azure;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Moq;
+﻿using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 using PetShop.Application.Interfaces.Repository;
 using PetShop.Application.Requests;
@@ -14,6 +12,20 @@ namespace PetShop.Tests.ServiceTests
     [TestFixture]
     public class ProductServiceTests
     {
+        private TestLogger<ProductService> _loggerMock = new TestLogger<ProductService>();
+        private IProductRepository _productRepositoryMock = null!;
+
+        private ProductService CreateProductService() 
+        {
+            return new ProductService(_productRepositoryMock, _loggerMock);
+        }
+
+        [SetUp]
+        public void SetUp() 
+        {
+            _loggerMock = new TestLogger<ProductService>();
+            _productRepositoryMock = Substitute.For<IProductRepository>();
+        }
 
         [Test]
         public void Test_Create_Product_Valid_GUID()
@@ -24,11 +36,9 @@ namespace PetShop.Tests.ServiceTests
 
             var product = ProductFixture.GetProduct();
 
-            var loggerMock = new TestLogger<ProductService>();
-            var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(m => m.Create(It.IsAny<Product>())).Returns(Task.FromResult<Product?>(product));
+            _productRepositoryMock.Create(Arg.Any<Product>()).Returns(product);
 
-            var productService = new ProductService(productRepositoryMock.Object, loggerMock);
+            var productService = CreateProductService();
             var entityResult = productService.Create(request).Result;
 
             entityResult.Should().NotBeNull();
@@ -42,12 +52,10 @@ namespace PetShop.Tests.ServiceTests
             var domain = product.domain;
             var name = product.name;
 
-            var loggerMock = new TestLogger<ProductService>();
-            var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(product);
-            productRepositoryMock.Setup(m => m.Delete(It.IsAny<Product>())).ReturnsAsync(true);
+            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(product);
+            _productRepositoryMock.Delete(Arg.Any<Product>()).Returns(true);
 
-            var productService = new ProductService(productRepositoryMock.Object, loggerMock);
+            var productService = CreateProductService(); 
             var entityResult = productService.Delete(domain, name).Result;
             entityResult.Should().Be(true);
         }
@@ -59,17 +67,14 @@ namespace PetShop.Tests.ServiceTests
             var domain = product.domain;
             var name = product.name;
             
+            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns((Product?)null);
+            _productRepositoryMock.Delete(Arg.Any<Product>()).Returns(true);
 
-            var loggerMock = new TestLogger<ProductService>();
-            var productRepositoryMock = new Mock<IProductRepository>();
-            productRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<Product?>(null));
-            productRepositoryMock.Setup(m => m.Delete(It.IsAny<Product>())).ReturnsAsync(true);
-
-            var productService = new ProductService(productRepositoryMock.Object, loggerMock);
+            var productService = CreateProductService();
             var entityResult = productService.Delete(domain, name).Result;
             entityResult.Should().Be(false);
-            loggerMock.Messages.Should().HaveCount(1);
-            loggerMock.Messages.Should().Contain($"Delete failed. Product not Found. Domain {domain}, Name {name}");
+            _loggerMock.Messages.Should().HaveCount(1);
+            _loggerMock.Messages.Should().Contain($"Delete failed. Product not Found. Domain {domain}, Name {name}");
         }
     }
 }

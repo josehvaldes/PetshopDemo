@@ -24,7 +24,17 @@ namespace PetShop.Application.Services
             client.taxnumber = request.TaxNumber;
             //set PartitionKey
             client.taxnumberend = client.taxnumber.ElementAt(client.taxnumber.Length - 1).ToString();
-            return await _clientRepository.Create(client);
+            var response = await _clientRepository.Create(client);
+            if (response)
+            {
+                _logger.LogInformation($"Client {request.TaxNumber} created.");
+                return client;
+            }
+            else
+            {
+                _logger.LogWarning($"Create failed. Client {request.TaxNumber} already exists.");
+                return null;
+            }
         }
 
         public async Task<bool> Delete(string taxNumber)

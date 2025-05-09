@@ -20,14 +20,14 @@ namespace PetShop.Infrastructure.Mockup
             },
         };
 
-        public async Task<Client?> Create(Client client)
+        public async Task<bool> Create(Client client)
         {
             return await Task.Run(() =>
             {
                 if (!_clientMockups.Where(x => x.taxnumber == client.taxnumber).Any())
                 {
                     _clientMockups.Add(client);
-                    return client;
+                    return true;
                 }
                 else
                 {

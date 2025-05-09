@@ -37,7 +37,7 @@ namespace PetShop.Infrastructure.Repository
         /// <param name="client">The client entity to create.</param>
         /// <returns>The created client entity, or null if the operation fails.</returns>
         /// <exception cref="Exception">Thrown when a duplicate client exists or an unexpected error occurs.</exception>
-        public async Task<Client?> Create(Client client)
+        public async Task<bool> Create(Client client)
         {
             var entity = client.ToEntity();
             entity.ETag = ETag.All;
@@ -51,11 +51,11 @@ namespace PetShop.Infrastructure.Repository
                 var response = await tableClient.AddEntityAsync(entity);
                 if (response.Status == 204)
                 {
-                    return client;
+                    return true;
                 }
 
                 _logger.LogWarning($"Create Client Unexpected Response status: [{response.Status}]");
-                return null;
+                return false;
             }
             catch (RequestFailedException ex)
             {

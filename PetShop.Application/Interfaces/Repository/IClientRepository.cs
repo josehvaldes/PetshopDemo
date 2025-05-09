@@ -9,7 +9,7 @@ namespace PetShop.Application.Interfaces.Repository
 {
     public interface IClientRepository
     {
-        Task<Client?> Create(Client client);
+        Task<bool> Create(Client client);
         Task<Client?> Retrieve(string taxNumberEnd, string taxNumber);
         Task<bool> Update(Client client);
         Task<bool> Delete(Client client);
