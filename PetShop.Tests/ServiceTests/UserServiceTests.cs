@@ -2,16 +2,27 @@
 using NUnit.Framework;
 using PetShopAPI.Auth;
 using FluentAssertions;
-using Moq;
 using PetShop.Domain.Entities;
 using PetShop.Application.Services;
 using PetShop.Application.Interfaces.Repository;
+using NSubstitute;
 
 namespace PetShop.Tests.ServiceTests
 {
     [TestFixture]
     public class UserServiceTests
     {
+        private IUserRepository _userRepositoryMock = null!;
+
+        private UserService CreateUserService()
+        {
+            return new UserService(_userRepositoryMock);
+        }
+        [SetUp]
+        public void SetUp() 
+        {
+            _userRepositoryMock = Substitute.For<IUserRepository>();
+        }
 
         [Test]
         public void Test_Generate_Valid_Hash()
@@ -47,10 +58,9 @@ namespace PetShop.Tests.ServiceTests
                 hash = "==",
             };
 
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(m => m.Create(It.IsAny<User>())).Returns(Task.FromResult<User?>(entity));
+            _userRepositoryMock.Create(Arg.Any<User>()).Returns(entity);
 
-            var userService = new UserService(userRepositoryMock.Object);
+            var userService = CreateUserService();
             var entityResult = userService.Create(entity).Result;
 
             entityResult.Should().NotBeNull();
@@ -68,10 +78,10 @@ namespace PetShop.Tests.ServiceTests
                 hash = "==",
             };
 
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(m => m.Create(It.IsAny<User>())).ReturnsAsync(entity);
+            
+            _userRepositoryMock.Create(Arg.Any<User>()).Returns(entity);
 
-            var userService = new UserService(userRepositoryMock.Object);
+            var userService = CreateUserService();
             var entityResult = userService.Create(entity).Result;
 
             entityResult.Should().NotBeNull();
@@ -90,10 +100,9 @@ namespace PetShop.Tests.ServiceTests
                 roles = "User"
             };
 
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(entity);
-            userRepositoryMock.Setup(m => m.Delete(It.IsAny<User>())).ReturnsAsync(true);
-            var userService = new UserService(userRepositoryMock.Object);
+            _userRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(entity);
+            _userRepositoryMock.Delete(Arg.Any<User>()).Returns(true);
+            var userService = CreateUserService();
 
             var entityResult = userService.Delete("bo", "usertest").Result;
 
@@ -113,10 +122,10 @@ namespace PetShop.Tests.ServiceTests
                 roles = "Administrator"
             };
 
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(entity);
-            userRepositoryMock.Setup(m => m.Delete(It.IsAny<User>())).ReturnsAsync(true);
-            var userService = new UserService(userRepositoryMock.Object);
+            _userRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(entity);
+            _userRepositoryMock.Delete(Arg.Any<User>()).Returns(true);
+
+            var userService = CreateUserService();
 
             var entityResult = userService.Delete("bo", "admin").Result;
 
@@ -127,9 +136,8 @@ namespace PetShop.Tests.ServiceTests
         [Test]
         public void Test_Delete_User_NotFound()
         {
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<User?>(null));
-            var userService = new UserService(userRepositoryMock.Object);
+            _userRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns((User?)null);
+            var userService = CreateUserService();
             var entityResult = userService.Delete("bo", "admin").Result;
 
             entityResult.Should().NotBeNull();
@@ -148,10 +156,11 @@ namespace PetShop.Tests.ServiceTests
                 roles = "User"
             };
 
-            var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(m => m.Retrieve(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<User?>(entity));
-            var userService = new UserService(userRepositoryMock.Object);
-            userRepositoryMock.Setup(m => m.Delete(It.IsAny<User>())).ReturnsAsync(false);
+            _userRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(entity);
+            _userRepositoryMock.Delete(Arg.Any<User>()).Returns(false);
+
+            var userService = CreateUserService();
+            
             var entityResult = userService.Delete("bo", "admin").Result;
 
             entityResult.Should().NotBeNull();

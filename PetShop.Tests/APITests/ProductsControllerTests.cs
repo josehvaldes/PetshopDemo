@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
@@ -18,19 +18,19 @@ namespace PetShop.Tests.APITests
     {
 
         private ILogger<ProductsController> _loggerMock = null!;
-        private Mock<IProductService> _productServiceMock = null!;
+        private IProductService _productServiceMock = null!;
         private IValidator<ProductRequest> _productRequestValidator = null!;
 
 
         private ProductsController CreateController()
         {
-            return new ProductsController(_productServiceMock.Object, _loggerMock, _productRequestValidator);
+            return new ProductsController(_productServiceMock, _loggerMock, _productRequestValidator);
         }   
 
         [SetUp]
         public void SetUp()
         {
-            _productServiceMock = new Mock<IProductService>();
+            _productServiceMock = Substitute.For<IProductService>();
             _loggerMock = new TestLogger<ProductsController>();
             _productRequestValidator = new ProductRequestValidator();
         }
@@ -42,7 +42,7 @@ namespace PetShop.Tests.APITests
             string domain = "us";
             string type = "dog";
 
-            _productServiceMock.Setup(m => m.RetrieveAvailablesList(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(mockList);
+            _productServiceMock.RetrieveAvailablesList(Arg.Any<string>(), Arg.Any<string>()).Returns(mockList);
 
             var controller = CreateController();
             var result = controller.GetProducts(domain, type, true).Result;
@@ -59,9 +59,9 @@ namespace PetShop.Tests.APITests
         [Test]
         public void GetProducts_RetriveAll_Success()
         {
-            var mockList = ProductFixture.GetProductList().Where(x => x.domain == "us" && x.pettype == "dog").ToList();
+            List<Product> mockList = ProductFixture.GetProductList().Where(x => x.domain == "us" && x.pettype == "dog").ToList();
 
-            _productServiceMock.Setup(m => m.RetrieveAllList(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(mockList);
+            _productServiceMock.RetrieveAllList(Arg.Any<string>(), Arg.Any<string>()).Returns(mockList);
 
             var controller = CreateController();
 
@@ -74,10 +74,8 @@ namespace PetShop.Tests.APITests
             OkObjectResult objectResult = (OkObjectResult)result;
             objectResult.StatusCode.Should().Be(200);
             objectResult.Value.Should().BeOfType<List<Product>>();
-
-            List<Product> list = (List<Product>)objectResult.Value;
+            IEnumerable<Product> list = (List<Product>)objectResult.Value;
             list.Count().Should().Be(2);
-
         }
 
         [Test]
@@ -86,7 +84,7 @@ namespace PetShop.Tests.APITests
             string domain = "us";
             string type = "dog";
 
-            _productServiceMock.Setup(m => m.RetrieveAvailablesList(domain, type)).ReturnsAsync(new List<Product>());
+            _productServiceMock.RetrieveAvailablesList(Arg.Any<string>(), Arg.Any<string>()).Returns(new List<Product>());
 
             var controller = CreateController();
 
@@ -121,7 +119,7 @@ namespace PetShop.Tests.APITests
             string domain = "us";
             string name = "dog-food";
 
-            _productServiceMock.Setup(m => m.Delete(domain, name)).ReturnsAsync(true);
+            _productServiceMock.Delete(Arg.Any<string>(), Arg.Any<string>()).Returns(true);
 
             var controller = CreateController();
 
