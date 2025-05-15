@@ -10,6 +10,6 @@ namespace PetShop.Application.Settings
     {
         public string StorageURI { get; set; } = string.Empty;
         public string AppConfiguration { get; set; } = string.Empty;
-        public string BlobStorageURI { get; set; } = string.Empty;
+        public string RegressionBlobStorageURI { get; set; } = string.Empty;
     }
 }
