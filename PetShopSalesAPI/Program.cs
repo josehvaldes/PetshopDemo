@@ -1,13 +1,8 @@
 using Asp.Versioning;
-using Azure.Identity;
 using FluentValidation;
 using HealthChecks.UI.Client;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using PetShop.Application.Interfaces.Repository;
@@ -17,6 +12,7 @@ using PetShop.Application.Settings;
 using PetShop.Infrastructure.Mockup;
 using PetShop.Infrastructure.Repository;
 using PetShopSalesAPI.Auth;
+using PetShopSalesAPI.Configurations;
 using PetShopSalesAPI.HealthChecks;
 using PetShopSalesAPI.Validators;
 using Serilog;
@@ -62,25 +58,8 @@ builder.Services.Configure<AzureSettings>(azureSettings);
 
 string endpoint = azureSettings.GetValue<string>("AppConfiguration") ?? throw new InvalidOperationException("The setting 'azureSettings:AppConfiguration' was not found.");
 
-//builder.Configuration.AddAzureAppConfiguration(options =>
-//{
-//    options.Connect(new Uri(endpoint), new DefaultAzureCredential())
-//            // Load all keys that start with `TestApp:` and have no label
-//            //.Select("TestApp:*", LabelFilter.Null)
+var isAzureAppConfigured = builder.AddAzureAppConfiguration();
 
-//            // Configure to reload configuration if the registered sentinel key is modified
-//            .ConfigureRefresh(refreshOptions =>
-//                refreshOptions.Register("mlpetshopapp", 
-//                refreshAll: true));
-//    // Load all feature flags with no label
-//    options.UseFeatureFlags( 
-//        featureFlagOptions => {
-//            //update the refresh to 20 seconds
-//            featureFlagOptions.SetRefreshInterval(TimeSpan.FromSeconds(20));
-//        });
-//});
-
-//builder.Services.AddAzureAppConfiguration();
 builder.Services.AddFeatureManagement();
 
 var featureManager = new FeatureManager( new ConfigurationFeatureDefinitionProvider(builder.Configuration));
@@ -123,12 +102,13 @@ builder.Services.ConfigureHealthChecks(builder.Configuration);
 var app = builder.Build();
 //HealthCheck Middleware
 //app.MapHealthChecks("/api/health");
-//HealthCheck Middleware
+
 app.MapHealthChecks("/api/health", new HealthCheckOptions()
 {
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
 app.UseHealthChecksUI(builder =>
 {
     builder.UIPath = "/healthchecks-ui";
@@ -144,7 +124,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseAzureAppConfiguration();
+if(isAzureAppConfigured)
+    app.UseAzureAppConfiguration();
+
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseAuthorization();
