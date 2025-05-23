@@ -93,8 +93,8 @@ namespace PetShop.Application.Services
                 price = request.Price,
             };
 
-            var entity = await _salesRepository.Create( saleEntity );
-            if (entity == null)
+            var created = await _salesRepository.Create( saleEntity );
+            if (!created)
             {
                 response.AddMessage($"Sales was not created. Review logs for more details");
             }
@@ -113,7 +113,7 @@ namespace PetShop.Application.Services
                     }
                     else 
                     {
-                        response.SaleId = entity.saleid;
+                        response.SaleId = saleEntity.saleid;
                     }
                 }
             }

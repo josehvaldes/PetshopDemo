@@ -23,7 +23,7 @@ namespace PetShop.Infrastructure.Repository
             _azureSettings = settings.Value;
         }
 
-        public async Task<Sale?> Create(Sale sale)
+        public async Task<bool> Create(Sale sale)
         {
             var entity = sale.ToEntity();
             try
@@ -36,10 +36,10 @@ namespace PetShop.Infrastructure.Repository
                 var response = await tableClient.AddEntityAsync(entity);
                 if (response.Status == 204)
                 {
-                    return entity;
+                    return true;
                 }
                 _logger.LogWarning($"Unexpected Response status: [{response.Status}]");
-                return null;
+                return false;
             }
             catch (Exception ex)
             {

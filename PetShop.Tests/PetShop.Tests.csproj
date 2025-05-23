@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PetShop.Infrastructure.Sqlite\PetShop.Infrastructure.Sqlite.csproj" />
     <ProjectReference Include="..\PetShopAPI\PetShopAPI.csproj" />
     <ProjectReference Include="..\PetShopSalesAPI\PetShopSalesAPI.csproj" />
   </ItemGroup>

@@ -16,6 +16,7 @@ using NSubstitute;
 using PetShop.Application.Services;
 using NSubstitute.ExceptionExtensions;
 using PetShopSalesAPI.Validators;
+using PetShopSaleAPI.Controllers;
 
 
 namespace PetShop.Tests.APITests

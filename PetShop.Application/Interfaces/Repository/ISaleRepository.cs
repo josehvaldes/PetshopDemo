@@ -9,7 +9,7 @@ namespace PetShop.Application.Interfaces.Repository
 {
     public interface ISaleRepository
     {
-        Task<Sale?> Create(Sale entity);
+        Task<bool> Create(Sale entity);
         Task<bool> Delete(Sale entity);
 
         Task<IEnumerable<Sale>> RetrieveList(string domain);

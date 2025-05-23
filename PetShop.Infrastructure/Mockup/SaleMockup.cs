@@ -7,12 +7,12 @@ namespace PetShop.Infrastructure.Mockup
     {
         public static List<Sale> _mockupSales = new List<Sale>();
 
-        public async Task<Sale?> Create(Sale entity)
+        public async Task<bool> Create(Sale entity)
         {
             return await Task.Run(() =>
             {
                 _mockupSales.Add(entity);
-                return entity;
+                return true;
             });
         }
 

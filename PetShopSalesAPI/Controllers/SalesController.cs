@@ -11,7 +11,7 @@ using PetShopSalesAPI.Extensions;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("PetShop.Tests")]
-namespace PetShopAPI.Controllers
+namespace PetShopSaleAPI.Controllers
 {
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/[controller]")]

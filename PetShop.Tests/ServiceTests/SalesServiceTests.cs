@@ -273,7 +273,7 @@ namespace PetShop.Tests.ServiceTests
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(User));
             _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
             _clientServiceMock.Retrieve(Arg.Any<string>()).Returns(Task.FromResult<Client?>(Client));
-            _salesRepositoryMock.Create(Arg.Any<Sale>()).Returns(Task.FromResult<Sale?>(Sale));
+            _salesRepositoryMock.Create(Arg.Any<Sale>()).Returns(Task.FromResult<bool>(true));
             _productRepositoryMock.Update(Arg.Any<Product>()).Returns(Task.FromResult(true));
 
 
