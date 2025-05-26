@@ -22,69 +22,87 @@ namespace PetShop.Infrastructure.Sqlite.Repository
             _databaseFixture = databaseFixture;
         }
 
-        public Task<bool> Create(Sale entity)
+        public async Task<bool> Create(Sale entity)
         {
-            using var connection = _databaseFixture.GetConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = "INSERT INTO Sales (saleId, domain, price, quantity, username, clienttaxnum, productname) " +
-                $"VALUES (@saleId, @domain, @price, @quantity, @username, @clienttaxnum, @productname)";
-            
-            var saleIdParam = command.CreateParameter();
-            saleIdParam.ParameterName = "@saleId";
-            saleIdParam.Value = entity.saleid;
-            command.Parameters.Add(saleIdParam);
+            try
+            {
+                //remove using to that reuse connection later
+                var connection = _databaseFixture.GetConnection();
+                using var command = connection.CreateCommand();
+                command.CommandText = "INSERT INTO Sales (saleId, domain, price, quantity, username, clienttaxnum, productname) " +
+                    $"VALUES (@saleId, @domain, @price, @quantity, @username, @clienttaxnum, @productname)";
 
-            var saleDomainParam = command.CreateParameter();
-            saleDomainParam.ParameterName = "@domain";
-            saleDomainParam.Value = entity.domain;
-            command.Parameters.Add(saleDomainParam);
+                var saleIdParam = command.CreateParameter();
+                saleIdParam.ParameterName = "@saleId";
+                saleIdParam.Value = entity.saleid;
+                command.Parameters.Add(saleIdParam);
 
-            var salePriceParam = command.CreateParameter();
-            salePriceParam.ParameterName = "@price";
-            salePriceParam.Value = entity.price;
-            command.Parameters.Add(salePriceParam);
+                var saleDomainParam = command.CreateParameter();
+                saleDomainParam.ParameterName = "@domain";
+                saleDomainParam.Value = entity.domain;
+                command.Parameters.Add(saleDomainParam);
 
-            var saleQuantityParam = command.CreateParameter();
-            saleQuantityParam.ParameterName = "@quantity";
-            saleQuantityParam.Value = entity.quantity;
-            command.Parameters.Add(saleQuantityParam);
+                var salePriceParam = command.CreateParameter();
+                salePriceParam.ParameterName = "@price";
+                salePriceParam.Value = entity.price;
+                command.Parameters.Add(salePriceParam);
 
-            var saleUsernameParam = command.CreateParameter();
-            saleUsernameParam.ParameterName = "@username";
-            saleUsernameParam.Value = entity.username;
-            command.Parameters.Add(saleUsernameParam);
+                var saleQuantityParam = command.CreateParameter();
+                saleQuantityParam.ParameterName = "@quantity";
+                saleQuantityParam.Value = entity.quantity;
+                command.Parameters.Add(saleQuantityParam);
 
-            var saleClientTaxNumParam = command.CreateParameter();
-            saleClientTaxNumParam.ParameterName = "@clienttaxnum";
-            saleClientTaxNumParam.Value = entity.clienttaxnum;
-            command.Parameters.Add(saleClientTaxNumParam);
+                var saleUsernameParam = command.CreateParameter();
+                saleUsernameParam.ParameterName = "@username";
+                saleUsernameParam.Value = entity.username;
+                command.Parameters.Add(saleUsernameParam);
 
-            var saleProductNameParam = command.CreateParameter();
-            saleProductNameParam.ParameterName = "@productname";
-            saleProductNameParam.Value = entity.productname;
-            command.Parameters.Add(saleProductNameParam);
+                var saleClientTaxNumParam = command.CreateParameter();
+                saleClientTaxNumParam.ParameterName = "@clienttaxnum";
+                saleClientTaxNumParam.Value = entity.clienttaxnum;
+                command.Parameters.Add(saleClientTaxNumParam);
 
-            command.ExecuteNonQuery();
-            return Task.FromResult(true);
+                var saleProductNameParam = command.CreateParameter();
+                saleProductNameParam.ParameterName = "@productname";
+                saleProductNameParam.Value = entity.productname;
+                command.Parameters.Add(saleProductNameParam);
+
+                await command.ExecuteNonQueryAsync();
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                return false;
+            }
         }
 
-        public Task<bool> Delete(Sale entity)
+        public async Task<bool> Delete(Sale entity)
         {
-            using var connection = _databaseFixture.GetConnection();
-            using var command = connection.CreateCommand();
+            try 
+            {
+                using var connection = _databaseFixture.GetConnection();
+                using var command = connection.CreateCommand();
 
-            command.CommandText = "DELETE FROM Sales WHERE saleId = @saleId";
-            var saleIdParam = command.CreateParameter();
-            saleIdParam.ParameterName = "@saleId";
-            saleIdParam.Value = entity.saleid;
-            command.Parameters.Add(saleIdParam);
-            command.ExecuteNonQuery();
-            return Task.FromResult(true);
+                command.CommandText = "DELETE FROM Sales WHERE saleId = @saleId";
+                var saleIdParam = command.CreateParameter();
+                saleIdParam.ParameterName = "@saleId";
+                saleIdParam.Value = entity.saleid;
+                command.Parameters.Add(saleIdParam);
+                await command.ExecuteNonQueryAsync();
+                return true;
+
+            }
+            catch (Exception e) 
+            {
+                return false;
+            }         
+
         }
 
-        public Task<IEnumerable<Sale>> RetrieveList(string domain)
+        public async Task<IEnumerable<Sale>> RetrieveList(string domain)
         {
-            using var connection = _databaseFixture.GetConnection();
+            //Remove 'using' to reuse the same connection
+            var connection = _databaseFixture.GetConnection();
             using var command = connection.CreateCommand();
 
             command.CommandText = "SELECT * FROM Sales WHERE domain = @domain";
@@ -92,7 +110,7 @@ namespace PetShop.Infrastructure.Sqlite.Repository
             domainParam.ParameterName = "@domain";
             domainParam.Value = domain;
             command.Parameters.Add(domainParam);
-            using var reader = command.ExecuteReader();
+            using var reader = await command.ExecuteReaderAsync();
             var sales = new List<Sale>();
             while (reader.Read())
             {
@@ -109,7 +127,8 @@ namespace PetShop.Infrastructure.Sqlite.Repository
                 sales.Add(sale);
             }
 
-            return Task.FromResult<IEnumerable<Sale>>(sales);
+            return sales;
+            
         }
     }
 }

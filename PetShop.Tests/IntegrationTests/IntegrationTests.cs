@@ -26,8 +26,6 @@ namespace PetShop.Tests.IntegrationTests
 {
     public class IntegrationTests
     {
-        private SalesController _salesController = null!;
-
         private IUserService _userServiceMock = null!;
         private IProductRepository _productRepositoryMock = null!;
         private IClientService _clientServiceMock = null!;
@@ -58,7 +56,7 @@ namespace PetShop.Tests.IntegrationTests
                 );
 
             var context = new DefaultHttpContext();
-            context.Items.Add("User", new AuthUser { UserName = "local", Domain = string.Empty });
+            context.Items.Add("User", new AuthUser { UserName = "local", Domain = "testDomain" });
             controller.ControllerContext.HttpContext = context;
             return controller;
         }
@@ -99,23 +97,31 @@ namespace PetShop.Tests.IntegrationTests
             return salesRequest;
         }
 
-        [TestCase("Completed", 200, typeof(OkObjectResult))]
-        //[TestCase("Error in service", 400, typeof(BadRequestObjectResult))]
-        public void CreateSale_Test(string message, int expectedStatusCode, Type expectedResultType) 
+        private Product GetProduct() 
         {
-
-            var user = new User();
-            var product = new Product()
+            return new Product()
             {
                 stock = 100,
                 unitaryprice = 49.9,
                 name = "dog chow"
             };
-            var client = new Client()
+        }
+        private Client GetClient() 
+        {
+            return new Client()
             {
                 fullname = "test",
                 taxnumber = "123456789"
             };
+        }
+
+        [TestCase("Completed", 200, typeof(OkObjectResult))]
+        public void CreateSale_Test(string message, int expectedStatusCode, Type expectedResultType) 
+        {
+            var user = new User();
+
+            var product = GetProduct();
+            var client = GetClient();
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(user));
             _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(product));
@@ -132,6 +138,30 @@ namespace PetShop.Tests.IntegrationTests
             result.Should().BeOfType(expectedResultType);
             var objectResult = result as ObjectResult;
             objectResult.StatusCode.Should().Be(expectedStatusCode);
+
+            var list = _salesRepository.RetrieveList(saleRequest.Domain).Result;
+            list.Count().Should().Be(1);
+
+        }
+
+
+        [TestCase("Completed", 200, typeof(OkObjectResult))]
+        public void RetrieveSale_Test(string message, int expectedStatusCode, Type expectedResultType) 
+        {
+            CreateSale_Test(message, expectedStatusCode, expectedResultType);
+            
+            var saleRequest = GetSalesRequest();
+            var controller = CreateSaleController();
+
+            var result = controller.RetrieveSales(saleRequest.Domain).Result;
+            result.Should().BeOfType<OkObjectResult>();
+            OkObjectResult objectResult = (OkObjectResult)result;
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+
+            IEnumerable<Sale> value = (IEnumerable<Sale>)objectResult.Value;
+            value.Should().NotBeNullOrEmpty();
+            value.Should().HaveCount(1);
+            value.First().domain.Should().Be(saleRequest.Domain);
         }
     }
 }
