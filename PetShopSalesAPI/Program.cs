@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Repository.Products;
 using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Services;
 using PetShop.Application.Settings;
@@ -138,7 +139,8 @@ app.Run();
 void AddAzureToScope(IServiceCollection services) 
 {
     services.AddScoped<IUserRepository, UserRepository>();
-    services.AddScoped<IProductRepository, ProductRepository>();
+    builder.Services.AddScoped<IProductCommand, ProductCommandRepository>();
+    builder.Services.AddScoped<IProductQuery, ProductQueryRepository>();
     services.AddScoped<IClientRepository, ClientRepository>();
     services.AddScoped<ISaleRepository, SaleRepository>();
 }
@@ -146,7 +148,8 @@ void AddAzureToScope(IServiceCollection services)
 void AddMocksToScope(IServiceCollection services)
 {
     services.AddScoped<IUserRepository, UserMockup>();
-    services.AddScoped<IProductRepository, ProductMockup>();
+    builder.Services.AddScoped<IProductCommand, ProductCommandMockup>();
+    builder.Services.AddScoped<IProductQuery, ProductQueryMockup>();
     services.AddScoped<IClientRepository, ClientMockup>();
     services.AddScoped<ISaleRepository, SaleMockup>();
 }

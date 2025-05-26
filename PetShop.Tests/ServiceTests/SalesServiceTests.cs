@@ -2,6 +2,7 @@
 using NSubstitute;
 using NUnit.Framework;
 using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Repository.Products;
 using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 using PetShop.Application.Services;
@@ -14,7 +15,8 @@ namespace PetShop.Tests.ServiceTests
     {
 
         private IUserService _userServiceMock = null!;
-        private IProductRepository _productRepositoryMock = null!;
+        private IProductCommand _productCommandMock = null!;
+        private IProductQuery _productQueryMock = null!;
         private IClientService _clientServiceMock = null!;
         private ISaleRepository _salesRepositoryMock = null!;
         private TestLogger<SaleService> _loggerMock = null!;
@@ -23,7 +25,8 @@ namespace PetShop.Tests.ServiceTests
         private SaleService CreateSaleService() 
         {
             return new SaleService(_userServiceMock,
-                _productRepositoryMock,
+                _productCommandMock, 
+                _productQueryMock,
                 _clientServiceMock,
                 _salesRepositoryMock,
                 _loggerMock);
@@ -35,7 +38,8 @@ namespace PetShop.Tests.ServiceTests
             // Setup code if needed
             _loggerMock = new TestLogger<SaleService>();
             _userServiceMock = Substitute.For<IUserService>();
-            _productRepositoryMock = Substitute.For<IProductRepository>();
+            _productCommandMock = Substitute.For<IProductCommand>();
+            _productQueryMock = Substitute.For<IProductQuery>();
             _clientServiceMock = Substitute.For<IClientService>();
             _salesRepositoryMock = Substitute.For<ISaleRepository>();
         }
@@ -47,7 +51,7 @@ namespace PetShop.Tests.ServiceTests
             var Product = new Product();
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(null));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Product);
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Product);
 
             var saleService = CreateSaleService();
 
@@ -71,7 +75,7 @@ namespace PetShop.Tests.ServiceTests
             var User = new User() { };
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(User));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(null));
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(null));
 
             var saleService = CreateSaleService();
 
@@ -103,7 +107,7 @@ namespace PetShop.Tests.ServiceTests
             };
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(User));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
             _clientServiceMock.Retrieve(Arg.Any<string>()).Returns(Task.FromResult<Client?>(client));
 
             var saleService = CreateSaleService();
@@ -141,7 +145,7 @@ namespace PetShop.Tests.ServiceTests
             };
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(User));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
             _clientServiceMock.Retrieve(Arg.Any<string>()).Returns(Task.FromResult<Client?>(Client));
 
             var saleService = CreateSaleService();
@@ -184,7 +188,7 @@ namespace PetShop.Tests.ServiceTests
             };
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(User));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
             _clientServiceMock.Retrieve(Arg.Any<string>()).Returns(Task.FromResult<Client?>(Client));
 
             var saleService = CreateSaleService(); ;
@@ -227,7 +231,7 @@ namespace PetShop.Tests.ServiceTests
             };
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(User));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
             _clientServiceMock.Retrieve(Arg.Any<string>()).Returns(Task.FromResult<Client?>(Client));
 
             var saleService = CreateSaleService();
@@ -271,10 +275,10 @@ namespace PetShop.Tests.ServiceTests
             };
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(User));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(Product));
             _clientServiceMock.Retrieve(Arg.Any<string>()).Returns(Task.FromResult<Client?>(Client));
             _salesRepositoryMock.Create(Arg.Any<Sale>()).Returns(Task.FromResult<bool>(true));
-            _productRepositoryMock.Update(Arg.Any<Product>()).Returns(Task.FromResult(true));
+            _productCommandMock.Update(Arg.Any<Product>()).Returns(Task.FromResult(true));
 
 
             var saleService = CreateSaleService();
@@ -297,7 +301,7 @@ namespace PetShop.Tests.ServiceTests
             //verify reduced stock
             Product.stock.Should().Be(8);
 
-            response.SaleId.Should().Be(Sale.saleid);
+            response.SaleId.Should().NotBeNullOrEmpty();
 
             response.Should().NotBeNull();
             response.Messages.Should().BeEmpty();

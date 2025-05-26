@@ -7,6 +7,7 @@ using Microsoft.FeatureManagement;
 using NSubstitute;
 using NUnit.Framework;
 using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Repository.Products;
 using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 using PetShop.Application.Services;
@@ -27,9 +28,9 @@ namespace PetShop.Tests.IntegrationTests
     public class IntegrationTests
     {
         private IUserService _userServiceMock = null!;
-        private IProductRepository _productRepositoryMock = null!;
-        private IClientService _clientServiceMock = null!;
-        
+        private IProductCommand _productCommandMock = null!;
+        private IProductQuery _productQueryMock = null!;
+        private IClientService _clientServiceMock = null!;        
         private ISaleRepository _salesRepository = null!;
         private IFeatureManager _featureManager = null!;
         private IValidator<SalesRequest> _salesRequestValidator = null!;
@@ -40,7 +41,8 @@ namespace PetShop.Tests.IntegrationTests
         private SaleService CreateSaleService()
         {
             return new SaleService(_userServiceMock,
-                _productRepositoryMock,
+                _productCommandMock,
+                _productQueryMock,
                 _clientServiceMock,
                 _salesRepository,
                 _loggerServiceMock);
@@ -69,7 +71,8 @@ namespace PetShop.Tests.IntegrationTests
             _loggerServiceMock = new TestLogger<SaleService>();
             
             _userServiceMock = Substitute.For<IUserService>();
-            _productRepositoryMock = Substitute.For<IProductRepository>();
+            _productCommandMock = Substitute.For<IProductCommand>();
+            _productQueryMock = Substitute.For<IProductQuery>();
             _clientServiceMock = Substitute.For<IClientService>();
             _featureManager = Substitute.For<IFeatureManager>();
 
@@ -124,9 +127,9 @@ namespace PetShop.Tests.IntegrationTests
             var client = GetClient();
 
             _userServiceMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<User?>(user));
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(product));
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult<Product?>(product));
             _clientServiceMock.Retrieve(Arg.Any<string>()).Returns(Task.FromResult<Client?>(client));
-            _productRepositoryMock.Update(Arg.Any<Product>()).Returns(Task.FromResult(true));
+            _productCommandMock.Update(Arg.Any<Product>()).Returns(Task.FromResult(true));
 
 
             var saleRequest = GetSalesRequest();

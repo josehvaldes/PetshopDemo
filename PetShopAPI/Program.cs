@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Repository.Products;
 using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Services;
 using PetShop.Application.Settings;
@@ -55,14 +56,16 @@ var mode = apisetting.GetValue<string>("mode");
 if (mode != null && mode == "azure")
 {
     builder.Services.AddScoped<IUserRepository, UserRepository>();
-    builder.Services.AddScoped<IProductRepository, ProductRepository>();
+    builder.Services.AddScoped<IProductCommand, ProductCommandRepository>();
+    builder.Services.AddScoped<IProductQuery, ProductQueryRepository>();
     builder.Services.AddScoped<IClientRepository, ClientRepository>();
     builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 }
 else 
 {
     builder.Services.AddScoped<IUserRepository, UserMockup>();
-    builder.Services.AddScoped<IProductRepository, ProductMockup>();
+    builder.Services.AddScoped<IProductCommand, ProductCommandMockup>();
+    builder.Services.AddScoped<IProductQuery, ProductQueryMockup>();
     builder.Services.AddScoped<IClientRepository, ClientMockup>();
     builder.Services.AddScoped<ISaleRepository, SaleMockup>();
 }

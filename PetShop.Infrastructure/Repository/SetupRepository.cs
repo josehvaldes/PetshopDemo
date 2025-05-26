@@ -109,7 +109,7 @@ namespace PetShop.Infrastructure.Repository
                 //CREATE Products Table
                 var tableClient = new TableClient(
                         new Uri(_azureSettings.StorageURI),
-                        ProductRepository.AzureTableName,
+                        ProductCommandRepository.AzureTableName,
                         new DefaultAzureCredential()
                     );
 
@@ -121,7 +121,7 @@ namespace PetShop.Infrastructure.Repository
 
                     if (tableItem.GetRawResponse().Status == 204)
                     {
-                        foreach (var product in ProductMockup._productMockups)
+                        foreach (var product in ProductQueryMockup._productMockups)
                         {
                             var entity = product.ToEntity();
                             var result = await tableClient.AddEntityAsync(entity);

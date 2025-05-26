@@ -25,7 +25,7 @@ namespace PetShop.Tests.Mocks
 
         public static IEnumerable<Product> GetProductList() 
         {
-            return ProductMockup._productMockups;
+            return ProductQueryMockup._productMockups;
         }
     }
 }

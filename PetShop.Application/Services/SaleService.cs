@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Repository.Products;
 using PetShop.Application.Interfaces.Services;
 using PetShop.Application.Requests;
 using PetShop.Domain.Entities;
@@ -12,17 +13,20 @@ namespace PetShop.Application.Services
         private readonly IClientService _clientService;
         private readonly ILogger<ISaleService> _logger;
         private readonly ISaleRepository _salesRepository;
-        private readonly IProductRepository _productRepository;
+        private readonly IProductCommand _productCommand;
+        private readonly IProductQuery _productQuery;
 
-        public SaleService(IUserService userService, 
-                        IProductRepository productRepository,
+        public SaleService(IUserService userService,
+                        IProductCommand productCommand, 
+                        IProductQuery productQuery,
                         IClientService clientService,
                         ISaleRepository salesRepository,
                         ILogger<ISaleService> logger) 
         {
             _clientService = clientService;
             _userService = userService;
-            _productRepository = productRepository;
+            _productCommand = productCommand;
+            _productQuery = productQuery;
             _logger = logger;
             _salesRepository = salesRepository;
         }
@@ -51,7 +55,7 @@ namespace PetShop.Application.Services
                 }
             }
 
-            var product = await _productRepository.Retrieve(request.Domain, request.ProductName);
+            var product = await _productQuery.Retrieve(request.Domain, request.ProductName);
 
             if (product==null) 
             {
@@ -104,7 +108,7 @@ namespace PetShop.Application.Services
                 if (product != null) 
                 {
                     product.stock = product.stock - request.Quantity;
-                    var productUpdated = await _productRepository.Update(product);
+                    var productUpdated = await _productCommand.Update(product);
                     if (!productUpdated)
                     {
                         //rollback sale

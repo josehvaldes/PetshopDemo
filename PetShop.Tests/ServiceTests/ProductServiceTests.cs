@@ -2,6 +2,7 @@
 using NSubstitute;
 using NUnit.Framework;
 using PetShop.Application.Interfaces.Repository;
+using PetShop.Application.Interfaces.Repository.Products;
 using PetShop.Application.Requests;
 using PetShop.Application.Services;
 using PetShop.Domain.Entities;
@@ -13,18 +14,20 @@ namespace PetShop.Tests.ServiceTests
     public class ProductServiceTests
     {
         private TestLogger<ProductService> _loggerMock = new TestLogger<ProductService>();
-        private IProductRepository _productRepositoryMock = null!;
+        private IProductCommand _productCommandMock = null!;
+        private IProductQuery _productQueryMock = null!;
 
         private ProductService CreateProductService() 
         {
-            return new ProductService(_productRepositoryMock, _loggerMock);
+            return new ProductService(_productCommandMock, _productQueryMock, _loggerMock);
         }
 
         [SetUp]
         public void SetUp() 
         {
             _loggerMock = new TestLogger<ProductService>();
-            _productRepositoryMock = Substitute.For<IProductRepository>();
+            _productCommandMock = Substitute.For<IProductCommand>();
+            _productQueryMock = Substitute.For<IProductQuery>();
         }
 
         [Test]
@@ -36,7 +39,7 @@ namespace PetShop.Tests.ServiceTests
 
             var product = ProductFixture.GetProduct();
 
-            _productRepositoryMock.Create(Arg.Any<Product>()).Returns(product);
+            _productCommandMock.Create(Arg.Any<Product>()).Returns(product);
 
             var productService = CreateProductService();
             var entityResult = productService.Create(request).Result;
@@ -52,8 +55,8 @@ namespace PetShop.Tests.ServiceTests
             var domain = product.domain;
             var name = product.name;
 
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(product);
-            _productRepositoryMock.Delete(Arg.Any<Product>()).Returns(true);
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns(product);
+            _productCommandMock.Delete(Arg.Any<Product>()).Returns(true);
 
             var productService = CreateProductService(); 
             var entityResult = productService.Delete(domain, name).Result;
@@ -66,9 +69,9 @@ namespace PetShop.Tests.ServiceTests
             var product = ProductFixture.GetProduct();
             var domain = product.domain;
             var name = product.name;
-            
-            _productRepositoryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns((Product?)null);
-            _productRepositoryMock.Delete(Arg.Any<Product>()).Returns(true);
+
+            _productQueryMock.Retrieve(Arg.Any<string>(), Arg.Any<string>()).Returns((Product?)null);
+            _productCommandMock.Delete(Arg.Any<Product>()).Returns(true);
 
             var productService = CreateProductService();
             var entityResult = productService.Delete(domain, name).Result;
