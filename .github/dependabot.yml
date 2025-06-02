@@ -12,7 +12,7 @@ updates:
       - "/PetShopML.Trainer"
     schedule:
       interval: "weekly"         # Checks weekly (options: daily, weekly, monthly)
-    open-pull-requests-limit: 5 # Limits number of open PRs
+    open-pull-requests-limit: 8 # Limits number of open PRs
     labels:                     # Optional: add labels to PRs
       - "dependencies"
       - "automated"

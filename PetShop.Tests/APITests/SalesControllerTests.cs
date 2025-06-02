@@ -90,7 +90,7 @@ namespace PetShop.Tests.APITests
 
         }
 
-        [TestCase("Completed", 200, typeof(OkObjectResult))]
+        [TestCase("Completed", 201, typeof(CreatedResult))]
         [TestCase("Error in service", 400, typeof(BadRequestObjectResult))]
         public void CreateSales_Test(string message, int expectedStatusCode, Type expectedResultType)
         {

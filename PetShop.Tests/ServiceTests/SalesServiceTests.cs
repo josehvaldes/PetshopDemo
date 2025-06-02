@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Cortex.Mediator;
+using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using PetShop.Application.Interfaces.Repository;
@@ -20,7 +21,7 @@ namespace PetShop.Tests.ServiceTests
         private IClientService _clientServiceMock = null!;
         private ISaleRepository _salesRepositoryMock = null!;
         private TestLogger<SaleService> _loggerMock = null!;
-
+        private IMediator _mediator = null!;
 
         private SaleService CreateSaleService() 
         {
@@ -29,7 +30,8 @@ namespace PetShop.Tests.ServiceTests
                 _productQueryMock,
                 _clientServiceMock,
                 _salesRepositoryMock,
-                _loggerMock);
+                _loggerMock,
+                _mediator);
         }
 
         [SetUp]
@@ -42,6 +44,7 @@ namespace PetShop.Tests.ServiceTests
             _productQueryMock = Substitute.For<IProductQuery>();
             _clientServiceMock = Substitute.For<IClientService>();
             _salesRepositoryMock = Substitute.For<ISaleRepository>();
+            _mediator = Substitute.For<IMediator>();
         }
 
         [Test]

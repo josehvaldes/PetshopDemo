@@ -404,3 +404,4 @@ PetShopAPI/Logfiles/*
 PetShopSalesAPI/Logfiles/*
 PetShopML/Logfiles/*
 PetShopML/appsettings.Development.json
+PetShopGraphQL/appsettings.Development.json

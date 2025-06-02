@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cortex.Mediator.Notifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PetShop.Domain.Entities
 {
-    public partial class Sale
+    public partial class Sale : INotification
     {
         public string productname { get; set; } = string.Empty;
         public string clienttaxnum { get; set; } = string.Empty;

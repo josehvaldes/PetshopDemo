@@ -6,8 +6,7 @@ namespace PetShop.Infrastructure.Mockup
 {
     public class ProductCommandMockup : IProductCommand
     {
-        public static List<Product> _productMockups = new List<Product>() {
-        };
+        public static List<Product> _productMockups = ProductQueryMockup._productMockups;
 
         public async Task<bool> Update(Product product)
         {

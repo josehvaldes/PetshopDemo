@@ -50,7 +50,7 @@ namespace PetShopAPI.Controllers
                 var response = await _clientService.Create(request);
                 if (response != null)
                 {
-                    return Ok(new { response.guid });
+                    return Created($"/{request.TaxNumber}", new { response.guid });
                 }
                 else
                 {

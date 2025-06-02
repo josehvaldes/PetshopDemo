@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Cortex.Mediator;
 using FluentAssertions;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +37,7 @@ namespace PetShop.Tests.IntegrationTests
         private IValidator<SalesRequest> _salesRequestValidator = null!;
         private TestLogger<SaleService> _loggerServiceMock = null!;
         private TestLogger<SalesController> _loggerControllerMock = null!;
-
+        private IMediator _mediator = null!;
 
         private SaleService CreateSaleService()
         {
@@ -45,9 +46,14 @@ namespace PetShop.Tests.IntegrationTests
                 _productQueryMock,
                 _clientServiceMock,
                 _salesRepository,
-                _loggerServiceMock);
+                _loggerServiceMock, 
+                _mediator);
         }
 
+        /// <summary>
+        /// Creates a SalesController instance with mocked dependencies and a test user context.
+        /// </summary>
+        /// <returns></returns>
         private SalesController CreateSaleController()
         {
             var saleService = CreateSaleService();
@@ -75,12 +81,18 @@ namespace PetShop.Tests.IntegrationTests
             _productQueryMock = Substitute.For<IProductQuery>();
             _clientServiceMock = Substitute.For<IClientService>();
             _featureManager = Substitute.For<IFeatureManager>();
-
+            _mediator = Substitute.For<IMediator>();
+            
+            // Initialize repositories and validators
             _salesRepository = new SaleRepository();
             _salesRequestValidator = new SalesRequestValidator();
             
         }
 
+        /// <summary>
+        /// Creates a SalesRequest object with test data for integration tests.
+        /// </summary>
+        /// <returns></returns>
         private SalesRequest GetSalesRequest() 
         {
             var salesRequest = new SalesRequest
@@ -100,6 +112,10 @@ namespace PetShop.Tests.IntegrationTests
             return salesRequest;
         }
 
+        /// <summary>
+        /// Creates a Product object with test data for integration tests.
+        /// </summary>
+        /// <returns></returns>
         private Product GetProduct() 
         {
             return new Product()
@@ -118,7 +134,7 @@ namespace PetShop.Tests.IntegrationTests
             };
         }
 
-        [TestCase("Completed", 200, typeof(OkObjectResult))]
+        [TestCase("Completed", 201, typeof(CreatedResult))]
         public void CreateSale_Test(string message, int expectedStatusCode, Type expectedResultType) 
         {
             var user = new User();
@@ -151,7 +167,7 @@ namespace PetShop.Tests.IntegrationTests
         [TestCase("Completed", 200, typeof(OkObjectResult))]
         public void RetrieveSale_Test(string message, int expectedStatusCode, Type expectedResultType) 
         {
-            CreateSale_Test(message, expectedStatusCode, expectedResultType);
+            CreateSale_Test(message, 201, typeof(CreatedResult));
             
             var saleRequest = GetSalesRequest();
             var controller = CreateSaleController();

@@ -68,7 +68,8 @@ namespace PetShopAPI.Controllers
                 var response = await _productService.Create(request);
                 if (response != null)
                 {
-                    return Ok(new { Guid = response.guid });
+                    
+                    return Created($"/{request.Domain}/{request.Name}", (new { Guid = response.guid }));
                 }
                 else 
                 {

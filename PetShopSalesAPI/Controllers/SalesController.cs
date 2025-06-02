@@ -58,7 +58,7 @@ namespace PetShopSaleAPI.Controllers
                 var response = await _saleService.Create(request);
                 if (response.IsCompleted())
                 {
-                    return Ok(new { saleId = response.SaleId, status = "Completed" });
+                    return Created($"/{response.SaleId}/", new { saleId = response.SaleId});
                 }
                 else 
                 {

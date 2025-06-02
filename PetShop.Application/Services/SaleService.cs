@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Cortex.Mediator;
+using Microsoft.Extensions.Logging;
 using PetShop.Application.Interfaces.Repository;
 using PetShop.Application.Interfaces.Repository.Products;
 using PetShop.Application.Interfaces.Services;
@@ -15,13 +16,15 @@ namespace PetShop.Application.Services
         private readonly ISaleRepository _salesRepository;
         private readonly IProductCommand _productCommand;
         private readonly IProductQuery _productQuery;
+        private readonly IMediator _mediator;
 
         public SaleService(IUserService userService,
                         IProductCommand productCommand, 
                         IProductQuery productQuery,
                         IClientService clientService,
                         ISaleRepository salesRepository,
-                        ILogger<ISaleService> logger) 
+                        ILogger<ISaleService> logger, 
+                        IMediator _mediator) 
         {
             _clientService = clientService;
             _userService = userService;
@@ -100,6 +103,7 @@ namespace PetShop.Application.Services
             var created = await _salesRepository.Create( saleEntity );
             if (!created)
             {
+                await _mediator.PublishAsync(saleEntity);
                 response.AddMessage($"Sales was not created. Review logs for more details");
             }
             else 

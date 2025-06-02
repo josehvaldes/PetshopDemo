@@ -64,7 +64,7 @@ namespace PetShopAPI.Controllers
 
                 if (response != null)
                 {
-                    return Ok(new { Guid = response.guid, message = "created" });
+                    return Created($"/{request.Domain}/{request.Username}",new { Guid = response.guid});
                 }
                 else 
                 {
