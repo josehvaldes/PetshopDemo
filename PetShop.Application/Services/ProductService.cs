@@ -11,13 +11,16 @@ namespace PetShop.Application.Services
     {
         private readonly IProductCommand _productCommand;
         private readonly IProductQuery _productQuery;
+        private readonly IProductQueryable _productQueryable;
+
         private readonly ILogger<ProductService> _logger;
 
-        public ProductService(IProductCommand productCommand, IProductQuery productQuery, ILogger<ProductService> logger) 
+        public ProductService(IProductCommand productCommand, IProductQuery productQuery, IProductQueryable productQueryable, ILogger<ProductService> logger) 
         {
             _productCommand = productCommand;
             _productQuery = productQuery;
             _logger = logger;
+            _productQueryable = productQueryable;
         }
 
         public async Task<Product?> Create(ProductRequest request)
@@ -75,6 +78,11 @@ namespace PetShop.Application.Services
         public async Task<IEnumerable<Product>> RetrieveAvailablesList(string domain, string type)
         {
             return await _productQuery.RetrieveAvailablesList(domain, type);
-        }        
+        }
+
+        public IQueryable<Product> GetQueryableProducts()
+        {
+            return _productQueryable.GetQueryable();
+        }
     }
 }

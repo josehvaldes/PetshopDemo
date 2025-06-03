@@ -13,24 +13,28 @@ namespace PetShopGraphQL.GraphQL
         /// <summary>
         /// 
         /// Query sample in graphql:
-        //  query {
-        //  products(domain: "bo", type: "cat")
-        //        {
-        //            guid
-        //            category
-        //            domain
-        //             name
+        /// <code>
+        /// query {
+        //    products(where:{ stock: { gt: 0 }})
+        //    {
+        //      guid
+        //      category
+        //      domain
+        //      name
+        //      stock
         //    }
         //  }
+        /// </code>
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="domain"></param>
         /// <param name="type"></param>
         /// <returns></returns>
+        [UseProjection]
         [UseFiltering]
-        [UseSorting]
-        public IQueryable<Product>  GetProducts([Service] IProductService repository, string domain, string type)
-            => repository.RetrieveAvailablesList(domain, type).Result.AsQueryable();
+        [UseSorting]        
+        public IQueryable<Product>  GetProducts([Service] IProductService service)
+            => service.GetQueryableProducts();
 
 
         /// <summary>
@@ -50,7 +54,7 @@ namespace PetShopGraphQL.GraphQL
         /// <param name="type"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Product? GetProductByName([Service] IProductService repository, string domain, string type, string name)
-            => repository.RetrieveAvailablesList(domain, type).Result.FirstOrDefault(x => x.name == name);
+        public Product? GetProductByName([Service] IProductService service, string domain, string type, string name)
+            => service.RetrieveAvailablesList(domain, type).Result.FirstOrDefault(x => x.name == name);
     }
 }

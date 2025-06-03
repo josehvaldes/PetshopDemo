@@ -16,6 +16,6 @@ namespace PetShop.Application.Interfaces.Services
 
         Task<Product?> Create(ProductRequest request);
 
-
+        IQueryable<Product> GetQueryableProducts();
     }
 }
