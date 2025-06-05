@@ -17,10 +17,12 @@ namespace PetShop.Tests.ServiceTests
         private IProductCommand _productCommandMock = null!;
         private IProductQuery _productQueryMock = null!;
         private IProductQueryable _productQueryable = null!;
+        private ISaleQueryable _saleQueryableMock = null!;
 
         private ProductService CreateProductService() 
         {
-            return new ProductService(_productCommandMock, _productQueryMock, _productQueryable, _loggerMock);
+            return new ProductService(_productCommandMock, _productQueryMock, 
+                _productQueryable, _saleQueryableMock, _loggerMock);
         }
 
         [SetUp]
@@ -30,6 +32,7 @@ namespace PetShop.Tests.ServiceTests
             _productCommandMock = Substitute.For<IProductCommand>();
             _productQueryMock = Substitute.For<IProductQuery>();
             _productQueryable = Substitute.For<IProductQueryable>();
+            _saleQueryableMock = Substitute.For<ISaleQueryable>();
         }
 
         [Test]

@@ -6,7 +6,8 @@ using PetShop.Infrastructure.EF.Sqlite;
 using PetShop.Infrastructure.Mockup;
 using PetShopGraphQL.GraphQL;
 using HotChocolate.AspNetCore; // Ensure this namespace is included
-using HotChocolate.AspNetCore.Extensions; // Ensure this namespace is included
+using HotChocolate.AspNetCore.Extensions;
+using PetShop.Application.Interfaces.Repository; // Ensure this namespace is included
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<PetShopContext>();
 builder.Services.AddScoped<IProductCommand, ProductCommandMockup>();
 builder.Services.AddScoped<IProductQuery, ProductQueryMockup>();
 builder.Services.AddScoped<IProductQueryable, ProductQueryable>();
-
+builder.Services.AddScoped< ISaleQueryable, SaleQueryable> ();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 
@@ -32,6 +33,7 @@ builder.Services
     .AddGraphQLServer()
     .RegisterDbContextFactory<PetShopContext>()
     .AddQueryType<Query>()
+    .AddType<QProduct>()
     .AddMutationType<Mutation>()
     .AddProjections()
     .AddFiltering()
@@ -43,7 +45,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PetShopContext>();
     db.Database.EnsureCreated();
-    ProductData.LazyInitializer(db);
+    ProductDataInitializer.LazyInitializer(db);
 }
 
 // Configure the HTTP request pipeline.

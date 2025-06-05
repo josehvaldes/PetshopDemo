@@ -12,15 +12,19 @@ namespace PetShop.Application.Services
         private readonly IProductCommand _productCommand;
         private readonly IProductQuery _productQuery;
         private readonly IProductQueryable _productQueryable;
+        private readonly ISaleQueryable _saleQueryable;
 
         private readonly ILogger<ProductService> _logger;
 
-        public ProductService(IProductCommand productCommand, IProductQuery productQuery, IProductQueryable productQueryable, ILogger<ProductService> logger) 
+        public ProductService(IProductCommand productCommand, IProductQuery productQuery, 
+            IProductQueryable productQueryable, ISaleQueryable saleQueryable, 
+            ILogger<ProductService> logger) 
         {
             _productCommand = productCommand;
             _productQuery = productQuery;
             _logger = logger;
             _productQueryable = productQueryable;
+            _saleQueryable = saleQueryable;
         }
 
         public async Task<Product?> Create(ProductRequest request)
@@ -83,6 +87,11 @@ namespace PetShop.Application.Services
         public IQueryable<Product> GetQueryableProducts()
         {
             return _productQueryable.GetQueryable();
+        }
+
+        public IQueryable<Sale> GetQueryableSales()
+        {
+            return _saleQueryable.GetQueryable();
         }
     }
 }

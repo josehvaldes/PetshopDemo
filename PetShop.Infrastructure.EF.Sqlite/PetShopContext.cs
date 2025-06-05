@@ -17,6 +17,7 @@ namespace PetShop.Infrastructure.EF.Sqlite
         /// This is the DbSet for the Product entity, which represents the products in the Pet Shop.
         /// </summary>
         public DbSet<Product> Products { get; set; }
+        public DbSet<Sale> Sales { get; set; }
 
         // The following configures EF to create a Sqlite database file in the
         // special "local" folder for your platform.
@@ -32,6 +33,9 @@ namespace PetShop.Infrastructure.EF.Sqlite
         {
             modelBuilder.Entity<Product>()
                 .HasKey(p => p.guid); // Set the primary key for the Product entity
-        }        
+
+            modelBuilder.Entity<Sale>()
+                .HasKey( s => s.saleid);
+        }
     }
 }

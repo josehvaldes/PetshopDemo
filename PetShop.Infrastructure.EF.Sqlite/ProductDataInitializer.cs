@@ -7,8 +7,29 @@ using System.Threading.Tasks;
 
 namespace PetShop.Infrastructure.EF.Sqlite
 {
-    public static class ProductData
+    public static class ProductDataInitializer
     {
+        public static List<Sale> SalesMockups = new List<Sale>() {
+            new Sale(){
+                saleid = "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6",
+                productname = "wiskas",
+                clienttaxnum = "123456789",
+                username = "john_doe",
+                quantity = 2,
+                price = 159.8, // 2 * 79.9
+                domain = "bo"
+            },
+            new Sale (){
+                saleid = "7a8b9c0d-1e2f-3g4h-5i6j-k7l8m9n0o1p2",
+                productname = "proplan senior",
+                clienttaxnum = "987654321",
+                username = "jane_doe",
+                quantity = 1,
+                price = 110.5, // 1 * 110.5
+                domain = "us"
+            }
+        };
+
 
         public static List<Product> ProductMockups = new List<Product>() {
 
@@ -63,8 +84,13 @@ namespace PetShop.Infrastructure.EF.Sqlite
             if (!context.Products.Any())
             {
                 context.Products.AddRange(ProductMockups);
-                context.SaveChanges();
             }
+            if (!context.Sales.Any()) 
+            {
+                context.Sales.AddRange(SalesMockups);
+            }
+
+            context.SaveChanges();
         }
     }
 }
