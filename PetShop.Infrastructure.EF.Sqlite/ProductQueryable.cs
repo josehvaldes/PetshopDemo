@@ -19,9 +19,9 @@ namespace PetShop.Infrastructure.EF.Sqlite
             _dbContext = petshopContext;
         }
 
-        public IQueryable<Product> GetQueryable()
+        public async Task<IQueryable<Product>> GetQueryable()
         {
-            return _dbContext.Products;
+            return await Task.FromResult(_dbContext.Products);
         }
 
         public Product? Retrieve(string domain, string name)

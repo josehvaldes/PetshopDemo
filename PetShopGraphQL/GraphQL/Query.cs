@@ -34,7 +34,7 @@ namespace PetShopGraphQL.GraphQL
         [UseFiltering]
         [UseSorting]        
         public IQueryable<Product>  GetProducts([Service] IProductService service)
-            => service.GetQueryableProducts();
+            => service.GetQueryableProducts().Result;
 
         /// <summary>
         /// Query sample in graphql:
@@ -46,7 +46,7 @@ namespace PetShopGraphQL.GraphQL
         [UseFiltering]
         [UseSorting]
         public IQueryable<Sale> GetSales([Service] IProductService service)
-            => service.GetQueryableSales();
+            => service.GetQueryableSales().Result;
 
         /// <summary>
         /// Query method to JOIN Sales and Products
@@ -70,9 +70,9 @@ namespace PetShopGraphQL.GraphQL
         [UseSorting]
         public IQueryable<SaleWithProduct> GetSalesWithProduct([Service] IProductService service) 
         {
-           return service.GetQueryableSales().Select( s => new SaleWithProduct() { 
+           return service.GetQueryableSales().Result.Select( s => new SaleWithProduct() { 
                Sale = s,
-               Product = service.GetQueryableProducts().FirstOrDefault(p => p.name == s.productname)
+               Product = service.GetQueryableProducts().Result.FirstOrDefault(p => p.name == s.productname)
            });
         }
 
@@ -121,7 +121,7 @@ namespace PetShopGraphQL.GraphQL
         [UseSorting]
         public IQueryable<QProduct> GetQProducts([Service] IProductService service) 
         {
-            return service.GetQueryableProducts().Select( p => new QProduct { 
+            return service.GetQueryableProducts().Result.Select( p => new QProduct { 
                 Id = p.guid,
                 Name = p.name
             } );

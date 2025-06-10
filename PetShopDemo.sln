@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShopGraphQL", "PetShopGr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShop.Infrastructure.EF.Sqlite", "PetShop.Infrastructure.EF.Sqlite\PetShop.Infrastructure.EF.Sqlite.csproj", "{EE75F33A-90E3-41F0-BC68-E3FCB59A1D49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petshop.Infrastructure.MongoDB", "Petshop.Infrastructure.MongoDB\Petshop.Infrastructure.MongoDB.csproj", "{15BD9ACA-0A5C-481A-90CB-A56A624A2ECE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{EE75F33A-90E3-41F0-BC68-E3FCB59A1D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE75F33A-90E3-41F0-BC68-E3FCB59A1D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE75F33A-90E3-41F0-BC68-E3FCB59A1D49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15BD9ACA-0A5C-481A-90CB-A56A624A2ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15BD9ACA-0A5C-481A-90CB-A56A624A2ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15BD9ACA-0A5C-481A-90CB-A56A624A2ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15BD9ACA-0A5C-481A-90CB-A56A624A2ECE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

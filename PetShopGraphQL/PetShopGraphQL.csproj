@@ -14,12 +14,14 @@
     <PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PetShop.Application\PetShop.Application.csproj" />
     <ProjectReference Include="..\PetShop.Domain\PetShop.Domain.csproj" />
     <ProjectReference Include="..\PetShop.Infrastructure.EF.Sqlite\PetShop.Infrastructure.EF.Sqlite.csproj" />
+    <ProjectReference Include="..\Petshop.Infrastructure.MongoDB\Petshop.Infrastructure.MongoDB.csproj" />
     <ProjectReference Include="..\PetShop.Infrastructure.Sqlite\PetShop.Infrastructure.Sqlite.csproj" />
     <ProjectReference Include="..\PetShop.Infrastructure\PetShop.Infrastructure.csproj" />
   </ItemGroup>

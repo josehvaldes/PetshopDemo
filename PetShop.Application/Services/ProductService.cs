@@ -84,14 +84,14 @@ namespace PetShop.Application.Services
             return await _productQuery.RetrieveAvailablesList(domain, type);
         }
 
-        public IQueryable<Product> GetQueryableProducts()
+        public async Task<IQueryable<Product>> GetQueryableProducts()
         {
-            return _productQueryable.GetQueryable();
+            return await _productQueryable.GetQueryable();
         }
 
-        public IQueryable<Sale> GetQueryableSales()
+        public async Task<IQueryable<Sale>> GetQueryableSales()
         {
-            return _saleQueryable.GetQueryable();
+            return await _saleQueryable.GetQueryable();
         }
     }
 }

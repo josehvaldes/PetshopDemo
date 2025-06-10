@@ -28,6 +28,6 @@ namespace PetShopGraphQL.GraphQL
         [UseFiltering]
         [UseSorting]
         public IQueryable<Sale> GetSalesByProduct([Service] IProductService repo)
-            => repo.GetQueryableSales().Where(s => s.productname == this.Name);
+            => repo.GetQueryableSales().Result.Where(s => s.productname == this.Name);
     }
 }

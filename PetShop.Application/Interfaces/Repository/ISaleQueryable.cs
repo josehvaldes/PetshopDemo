@@ -9,6 +9,6 @@ namespace PetShop.Application.Interfaces.Repository
 {
     public interface ISaleQueryable
     {
-        IQueryable<Sale> GetQueryable();
+        Task<IQueryable<Sale>> GetQueryable();
     }
 }

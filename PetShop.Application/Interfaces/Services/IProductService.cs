@@ -16,8 +16,8 @@ namespace PetShop.Application.Interfaces.Services
 
         Task<Product?> Create(ProductRequest request);
 
-        IQueryable<Product> GetQueryableProducts();
+        Task<IQueryable<Product>> GetQueryableProducts();
 
-        IQueryable<Sale> GetQueryableSales();
+        Task<IQueryable<Sale>> GetQueryableSales();
     }
 }
