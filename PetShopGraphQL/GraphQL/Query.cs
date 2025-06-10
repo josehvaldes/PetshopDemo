@@ -70,10 +70,15 @@ namespace PetShopGraphQL.GraphQL
         [UseSorting]
         public IQueryable<SaleWithProduct> GetSalesWithProduct([Service] IProductService service) 
         {
-           return service.GetQueryableSales().Result.Select( s => new SaleWithProduct() { 
+
+            //MongoDB does not support cross-collection joins natively in LINQ. Always materialize both collections before joining.
+            //THIS CODE FAILES WITH MONGO DB
+            var sales = service.GetQueryableSales().Result; //.ToList();
+            var products = service.GetQueryableProducts().Result;//.ToList();
+           return sales.Select( s => new SaleWithProduct() { 
                Sale = s,
-               Product = service.GetQueryableProducts().Result.FirstOrDefault(p => p.name == s.productname)
-           });
+               Product = products.FirstOrDefault(p => p.name == s.productname)
+           }).AsQueryable();
         }
 
         /// <summary>
