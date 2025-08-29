@@ -20,7 +20,8 @@ namespace PetShop.Infrastructure.Extensions
                 quantity = sale.quantity,
                 price = sale.price,
                 domain = sale.domain,
-                saleid = sale.saleid
+                saleid = sale.saleid,
+                saledate = sale.saledate
             };
         }
     }

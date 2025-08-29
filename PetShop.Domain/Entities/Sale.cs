@@ -15,6 +15,7 @@ namespace PetShop.Domain.Entities
         public string username { get; set; } = string.Empty;
         public int quantity { get; set; }
         public double price { get; set; }
+        public DateTime? saledate { get; set; } = null!;
 
         [IgnoreDataMember]
         public string domain { get; set; } = string.Empty;

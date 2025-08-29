@@ -17,7 +17,8 @@ namespace PetShop.Infrastructure.EF.Sqlite
                 username = "john_doe",
                 quantity = 2,
                 price = 159.8, // 2 * 79.9
-                domain = "bo"
+                domain = "bo",
+                saledate = DateTime.UtcNow
             },
             new Sale (){
                 saleid = "7a8b9c0d-1e2f-3g4h-5i6j-k7l8m9n0o1p2",
@@ -26,7 +27,8 @@ namespace PetShop.Infrastructure.EF.Sqlite
                 username = "jane_doe",
                 quantity = 1,
                 price = 110.5, // 1 * 110.5
-                domain = "us"
+                domain = "us",
+                saledate = DateTime.UtcNow
             }
         };
 

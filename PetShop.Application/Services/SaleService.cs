@@ -98,6 +98,7 @@ namespace PetShop.Application.Services
                 username = request.Username,
                 quantity = request.Quantity,
                 price = request.Price,
+                saledate = DateTime.UtcNow
             };
 
             var created = await _salesRepository.Create( saleEntity );

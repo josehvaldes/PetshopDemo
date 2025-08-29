@@ -17,6 +17,7 @@ using PetShopAPI.Models;
 using PetShopAPI.Validators;
 using Serilog;
 using System;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +84,22 @@ builder.Services.AddScoped<ISetupRepository, SetupRepository>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<AuthenticationRequestValidator>();
 
+builder.Services.AddRateLimiter( options=> { 
+    options.GlobalLimiter = 
+        PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        {
+            return RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                factory: key => new FixedWindowRateLimiterOptions
+                {
+                    AutoReplenishment = true,
+                    PermitLimit = 100,
+                    Window = TimeSpan.FromMinutes(1)
+                });
+        });
+});
+
+
 var log = new LoggerConfiguration().CreateLogger();
 
 //Add support to logging with SERILOG
@@ -111,6 +128,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseRateLimiter();
 
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
