@@ -4,15 +4,15 @@ updates:
     directories: # Locations of the project files
       - "/PetShopSalesAPI"
       - "/PetShopAPI"
-      - "/PetShopML"
       - "/PetShop.Application"
       - "/PetShop.Domain"
       - "/PetShop.Infrastructure"
       - "/PetShopML.Model"
-      - "/PetShopML.Trainer"
+      - "/PetShopML.Tests"
     schedule:
       interval: "weekly"         # Checks weekly (options: daily, weekly, monthly)
     open-pull-requests-limit: 8 # Limits number of open PRs
+    rebase-strategy: "auto" # Options: "auto", "disabled", "none"
     labels:                     # Optional: add labels to PRs
       - "dependencies"
       - "automated"
