@@ -2,13 +2,6 @@ version: 2
 updates:
   - package-ecosystem: "nuget"  # For .NET dependencies
     directories: # Locations of the project files
-      - "/PetShopSalesAPI"
-      - "/PetShopAPI"
-      - "/PetShop.Application"
-      - "/PetShop.Domain"
-      - "/PetShop.Infrastructure"
-      - "/PetShopML.Model"
-      - "/PetShopML.Tests"
     schedule:
       interval: "weekly"         # Checks weekly (options: daily, weekly, monthly)
     open-pull-requests-limit: 8 # Limits number of open PRs
